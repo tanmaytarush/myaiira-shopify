@@ -1,0 +1,238 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: myaiira-ai — AI Fashion Recommendation Backend
+
+# ─────────────────────────── NOTES ───────────────────────────
+# Architecture split:
+#   Lambda (this file): ingest, recommendation, moodboard, virtual-tryon, personalize-sync
+#   n8n (not here):     enrichment, all scheduled/batch workflows
+#   No Lambda needed:   embeddings (OpenRouter API call at runtime)
+
+Globals:
+  Function:
+    Runtime: python3.12
+    Architectures: [x86_64]  # always x86_64 — built in GitHub Actions (ubuntu-latest), not locally
+    MemorySize: 512
+    Tracing: Active
+    Layers:
+      - !Ref CommonLayer
+    Environment:
+      Variables:
+        ENVIRONMENT: !Ref Environment
+        LOG_LEVEL: !If [IsProd, "INFO", "DEBUG"]
+        DB_HOST: !Ref DbHost
+        DB_NAME: !Ref DbName
+        DB_USER: !Ref DbUser
+        DB_PASSWORD: !Ref DbPassword
+        PINECONE_API_KEY: !Ref PineconeApiKey
+        OPENROUTER_API_KEY: !Ref OpenrouterApiKey
+        S3_BUCKET: !Sub "myaiira-media-${Environment}"
+
+Parameters:
+  Environment:
+    Type: String
+    Default: dev
+    AllowedValues: [dev, prod]
+
+  AcmCertificateArn:
+    Type: String
+    Description: ARN of ACM certificate for ai.myaiira.com (must be in ap-south-1)
+
+  DbHost:
+    Type: String
+    NoEcho: true
+  DbName:
+    Type: String
+    NoEcho: true
+  DbUser:
+    Type: String
+    NoEcho: true
+  DbPassword:
+    Type: String
+    NoEcho: true
+  PineconeApiKey:
+    Type: String
+    NoEcho: true
+  OpenrouterApiKey:
+    Type: String
+    NoEcho: true
+
+Conditions:
+  IsProd: !Equals [!Ref Environment, prod]
+
+# ─────────────────────────── LAYERS ───────────────────────────
+
+Resources:
+
+  CommonLayer:
+    Type: AWS::Serverless::LayerVersion
+    Properties:
+      LayerName: !Sub "myaiira-common-${Environment}"
+      ContentUri: layers/common/
+      CompatibleRuntimes: [python3.12]
+    Metadata:
+      BuildMethod: python3.12
+
+# ─────────────────────────── LAMBDAS ───────────────────────────
+
+  IngestFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: !Sub "myaiira-ingest-${Environment}"
+      CodeUri: lambdas/ingest/
+      Handler: handler.lambda_handler
+      Timeout: 180
+      Events:
+        Api:
+          Type: Api
+          Properties:
+            RestApiId: !Ref MyaiiraApi
+            Path: /ingest
+            Method: POST
+
+  RecommendationFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: !Sub "myaiira-recommendation-${Environment}"
+      CodeUri: lambdas/recommendation/
+      Handler: handler.lambda_handler
+      Timeout: 180
+      ReservedConcurrentExecutions: 100  # hot path — guarantee capacity
+      Events:
+        Api:
+          Type: Api
+          Properties:
+            RestApiId: !Ref MyaiiraApi
+            Path: /recommend
+            Method: POST
+
+  MoodboardFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: !Sub "myaiira-moodboard-${Environment}"
+      CodeUri: lambdas/moodboard/
+      Handler: handler.lambda_handler
+      Timeout: 180
+      MemorySize: 1024  # Sharp image compositing needs more memory
+      Events:
+        Api:
+          Type: Api
+          Properties:
+            RestApiId: !Ref MyaiiraApi
+            Path: /moodboard
+            Method: POST
+
+  VirtualTryonFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: !Sub "myaiira-virtual-tryon-${Environment}"
+      CodeUri: lambdas/virtual-tryon/
+      Handler: handler.lambda_handler
+      Timeout: 300  # image gen can be slow — keeping higher than minimum
+      MemorySize: 1024  # WARNING: do not reduce below 512 — handles image payloads in memory
+      Events:
+        Api:
+          Type: Api
+          Properties:
+            RestApiId: !Ref MyaiiraApi
+            Path: /tryon
+            Method: POST
+
+  PersonalizeSyncFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: !Sub "myaiira-personalize-sync-${Environment}"
+      CodeUri: lambdas/personalize-sync/
+      Handler: handler.lambda_handler
+      Timeout: 180
+      Events:
+        Api:
+          Type: Api
+          Properties:
+            RestApiId: !Ref MyaiiraApi
+            Path: /events
+            Method: POST
+
+# ─────────────────────────── API GATEWAY ───────────────────────────
+
+  MyaiiraApi:
+    Type: AWS::Serverless::Api
+    Properties:
+      Name: !Sub "myaiira-api-${Environment}"
+      StageName: !Ref Environment
+      Cors:
+        AllowMethods: "'POST, GET, OPTIONS'"
+        AllowHeaders: "'Content-Type,Authorization'"
+        AllowOrigin: "'*'"
+
+  # Custom domain — ai.myaiira.com
+  # Requires ACM cert to be created manually first (see GETTING_STARTED.md Step 3)
+  ApiCustomDomain:
+    Type: AWS::ApiGateway::DomainName
+    Properties:
+      DomainName: !If [IsProd, "ai.myaiira.com", "ai-dev.myaiira.com"]
+      RegionalCertificateArn: !Ref AcmCertificateArn
+      EndpointConfiguration:
+        Types: [REGIONAL]
+
+  ApiBasePathMapping:
+    Type: AWS::ApiGateway::BasePathMapping
+    DependsOn: MyaiiraApiStage
+    Properties:
+      DomainName: !Ref ApiCustomDomain
+      RestApiId: !Ref MyaiiraApi
+      Stage: !Ref Environment
+
+  # Route53 record — auto-creates DNS, no manual CNAME needed
+  ApiDnsRecord:
+    Type: AWS::Route53::RecordSet
+    Properties:
+      HostedZoneName: "myaiira.com."  # note the trailing dot — required
+      Name: !If [IsProd, "ai.myaiira.com.", "ai-dev.myaiira.com."]
+      Type: A
+      AliasTarget:
+        DNSName: !GetAtt ApiCustomDomain.RegionalDomainName
+        HostedZoneId: !GetAtt ApiCustomDomain.RegionalHostedZoneId
+
+# ─────────────────────────── OUTPUTS ───────────────────────────
+
+Outputs:
+  ApiEndpoint:
+    Description: API Gateway base URL — replace with custom domain once configured
+    Value: !Sub "https://${MyaiiraApi}.execute-api.${AWS::Region}.amazonaws.com/${Environment}"
+    Export:
+      Name: !Sub "myaiira-api-endpoint-${Environment}"
+
+  IngestUrl:
+    Description: "POST /ingest — receive and validate incoming requests"
+    Value: !Sub "https://${MyaiiraApi}.execute-api.${AWS::Region}.amazonaws.com/${Environment}/ingest"
+    Export:
+      Name: !Sub "myaiira-ingest-url-${Environment}"
+
+  RecommendationUrl:
+    Description: "POST /recommend — run full recommendation pipeline"
+    Value: !Sub "https://${MyaiiraApi}.execute-api.${AWS::Region}.amazonaws.com/${Environment}/recommend"
+    Export:
+      Name: !Sub "myaiira-recommendation-url-${Environment}"
+
+  MoodboardUrl:
+    Description: "POST /moodboard — generate outfit moodboard image"
+    Value: !Sub "https://${MyaiiraApi}.execute-api.${AWS::Region}.amazonaws.com/${Environment}/moodboard"
+    Export:
+      Name: !Sub "myaiira-moodboard-url-${Environment}"
+
+  VirtualTryonUrl:
+    Description: "POST /tryon — async virtual try-on image generation"
+    Value: !Sub "https://${MyaiiraApi}.execute-api.${AWS::Region}.amazonaws.com/${Environment}/tryon"
+    Export:
+      Name: !Sub "myaiira-tryon-url-${Environment}"
+
+  CustomDomainUrl:
+    Description: "Custom domain — use this once DNS is configured"
+    Value: !If [IsProd, "https://ai.myaiira.com", "https://ai-dev.myaiira.com"]
+    Export:
+      Name: !Sub "myaiira-custom-domain-${Environment}"
+
+  CustomDomainTarget:
+    Description: "Add this as CNAME in your DNS for ai.myaiira.com"
+    Value: !GetAtt ApiCustomDomain.RegionalDomainName

@@ -1,0 +1,23 @@
+version = 0.1
+
+[default.global.parameters]
+region = "ap-south-1"
+capabilities = "CAPABILITY_IAM CAPABILITY_NAMED_IAM"
+
+[dev.deploy.parameters]
+stack_name = "myaiira-ai-dev"
+s3_bucket = "myaiira-sam-artifact"
+s3_prefix = "myaiira-ai"
+region = "ap-south-1"
+capabilities = "CAPABILITY_IAM CAPABILITY_NAMED_IAM"
+parameter_overrides = "Environment=dev AcmCertificateArn=arn:aws:acm:ap-south-1:912606392282:certificate/4cb10230-4c97-44ac-a1b4-9f202d48db1d DbHost=${DB_HOST} DbName=${DB_NAME} DbUser=${DB_USER} DbPassword=${DB_PASSWORD} PineconeApiKey=${PINECONE_API_KEY} OpenrouterApiKey=${OPENROUTER_API_KEY}"
+tags = "env=dev project=myaiira-ai"
+
+[prod.deploy.parameters]
+stack_name = "myaiira-ai-prod"
+s3_bucket = "myaiira-sam-artifact"
+s3_prefix = "myaiira-ai"
+region = "ap-south-1"
+capabilities = "CAPABILITY_IAM CAPABILITY_NAMED_IAM"
+parameter_overrides = "Environment=prod AcmCertificateArn=arn:aws:acm:ap-south-1:912606392282:certificate/4cb10230-4c97-44ac-a1b4-9f202d48db1d DbHost=${DB_HOST} DbName=${DB_NAME} DbUser=${DB_USER} DbPassword=${DB_PASSWORD} PineconeApiKey=${PINECONE_API_KEY} OpenrouterApiKey=${OPENROUTER_API_KEY}"
+tags = "env=prod project=myaiira-ai"
