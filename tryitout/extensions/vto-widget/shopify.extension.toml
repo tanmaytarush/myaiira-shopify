@@ -1,0 +1,7 @@
+api_version = "2024-10"
+uid = "9aac7d8b-adaf-04c1-b7de-6d9ca5050d373b24e7bf"
+
+[[extensions]]
+type = "theme"
+name = "vto-widget"
+handle = "vto-widget"
