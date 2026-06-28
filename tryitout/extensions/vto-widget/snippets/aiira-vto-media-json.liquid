@@ -1,0 +1,25 @@
+{%- comment -%}
+  One VTO item from a product media image (fallback when look pieces aren't linked).
+  Params: media, product, index (0-based)
+{%- endcomment -%}
+{%- liquid
+  assign vto_media_types = 'dress,earrings,necklace,bracelet,handbag,sandals,top,bottom,default' | split: ','
+  assign vto_sub_type = vto_media_types[index] | default: 'default'
+  if media.alt != blank
+    assign alt_handle = media.alt | handleize
+    if alt_handle != blank
+      assign vto_sub_type = alt_handle
+    endif
+  endif
+  assign piece_title = media.alt | default: product.title
+  if index > 0 and media.alt == blank
+    assign piece_title = product.title | append: ' — piece ' | append: index | plus: 1
+  endif
+-%}
+{
+  "product_id": {{ product.id | json }},
+  "product_handle": {{ product.handle | json }},
+  "title": {{ piece_title | json }},
+  "item_image_url": {{ media | image_url: width: 1200 | json }},
+  "sub_type": {{ vto_sub_type | json }}
+}

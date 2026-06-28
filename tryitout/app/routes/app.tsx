@@ -24,6 +24,7 @@ export default function App() {
         <Link to="/app" rel="home">
           Home
         </Link>
+        <Link to="/app/looks">Look builder</Link>
         <Link to="/app/additional">Additional page</Link>
       </NavMenu>
       <Outlet />

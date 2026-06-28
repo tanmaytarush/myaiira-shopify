@@ -1,0 +1,13 @@
+<script data-aiira-vto-loader>
+  (function () {
+    if (window.__AIIRA_VTO_LOADING__ || window.__AIIRA_VTO__) return;
+    window.__AIIRA_VTO_LOADING__ = true;
+    var s = document.createElement("script");
+    s.src = {{ 'vto-widget.js' | asset_url | json }};
+    s.defer = true;
+    s.onload = function () {
+      window.__AIIRA_VTO_LOADING__ = false;
+    };
+    document.head.appendChild(s);
+  })();
+</script>

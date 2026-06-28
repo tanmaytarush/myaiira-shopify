@@ -22,10 +22,33 @@ See [`DECISIONS.md`](./DECISIONS.md) for locked decisions.
 ## Local setup
 
 ```bash
-nvm use          # Node 20 (see .nvmrc)
-cp .env.example .env   # fill in values
-shopify app config link   # link to "tryitout" in Partner Dashboard
-npm run dev        # uses --theme Dawn on tryitout-dev
+nvm use
+cp .env.example .env
+shopify app config link
+npm run setup:theme-host   # once
+npm run dev
 ```
 
-If `themeCreate` 401 appears, follow [`docs/DEV-STORE-SETUP.md`](./docs/DEV-STORE-SETUP.md).
+### Add Atelier UI blocks (theme editor)
+
+| Block | Where | Matches reference |
+|-------|--------|-------------------|
+| **Atelier Home** | Home page | Hero, trends carousel, bespoke section |
+| **Atelier Collection** | Collection page | Editorial product grid |
+| **Atelier Look** | Product page | PDP + try-on modal |
+
+### Wire the full Atelier flow (run once after deploy)
+
+```bash
+npm run setup:storefront-ui   # homepage
+npm run setup:collection-ui   # /collections/all styling
+npm run setup:product-page    # product PDP (e.g. chick-minimal)
+```
+
+**Intended shopper path:** Home → **Click to begin styling** → Atelier product page → **Try this look** → VTO modal.
+
+Set **Primary styling product** in the Atelier Home block to `chick-minimal` so the CTA skips the default Dawn catalog.
+
+**Online Store → Themes → Customize** → add blocks from **Apps**.
+
+If host theme errors appear, see [`docs/DEV-STORE-SETUP.md`](./docs/DEV-STORE-SETUP.md).

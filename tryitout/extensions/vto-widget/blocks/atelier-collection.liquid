@@ -1,0 +1,109 @@
+<section class="aiira-collection" {{ block.shopify_attributes }}>
+  <div class="aiira-collection__inner">
+    <header class="aiira-collection__header">
+      <div>
+        <p class="aiira-eyebrow">{{ block.settings.eyebrow | default: "Curated for you" }}</p>
+        <h1 class="aiira-heading aiira-heading--md">{{ collection.title }}</h1>
+        {% if collection.description != blank %}
+          <p class="aiira-body aiira-body--lg">{{ collection.description | strip_html | truncate: 200 }}</p>
+        {% endif %}
+      </div>
+      <p class="aiira-collection__count">
+        {% if collection.products_count == 1 %}
+          1 piece
+        {% else %}
+          {{ collection.products_count }} pieces
+        {% endif %}
+      </p>
+    </header>
+
+    {% paginate collection.products by block.settings.products_per_page %}
+      {% if collection.products.size > 0 %}
+        <div class="aiira-collection__grid">
+          {% for product in collection.products %}
+            <article class="aiira-collection__card">
+              <a href="{{ product.url }}" class="aiira-collection__card-link">
+                <div class="aiira-collection__card-media">
+                  {% if product.featured_media %}
+                    <img
+                      src="{{ product.featured_media | image_url: width: 800 }}"
+                      alt="{{ product.featured_media.alt | default: product.title | escape }}"
+                      loading="lazy"
+                      width="400"
+                      height="500"
+                    />
+                  {% else %}
+                    <div class="aiira-collection__card-placeholder">{{ product.title | escape }}</div>
+                  {% endif %}
+                  {% unless product.available %}
+                    <span class="aiira-collection__badge">Sold out</span>
+                  {% endunless %}
+                </div>
+                <div class="aiira-collection__card-body">
+                  <h2 class="aiira-collection__card-title">{{ product.title }}</h2>
+                  <p class="aiira-collection__card-price">
+                    {% if product.price_varies %}
+                      From {{ product.price_min | money }}
+                    {% else %}
+                      {{ product.price | money }}
+                    {% endif %}
+                  </p>
+                  {% if product.vendor != blank %}
+                    <p class="aiira-collection__card-vendor">{{ product.vendor }}</p>
+                  {% endif %}
+                </div>
+              </a>
+            </article>
+          {% endfor %}
+        </div>
+
+        {% if paginate.pages > 1 %}
+          <nav class="aiira-collection__pagination" aria-label="Pagination">
+            {% if paginate.previous %}
+              <a href="{{ paginate.previous.url }}" class="aiira-btn aiira-btn--outline">Previous</a>
+            {% endif %}
+            <span class="aiira-collection__page">Page {{ paginate.current_page }} of {{ paginate.pages }}</span>
+            {% if paginate.next %}
+              <a href="{{ paginate.next.url }}" class="aiira-btn">Next</a>
+            {% endif %}
+          </nav>
+        {% endif %}
+      {% else %}
+        <p class="aiira-body">{{ block.settings.empty_text | default: "No pieces in this collection yet." }}</p>
+      {% endif %}
+    {% endpaginate %}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Atelier Collection",
+  "target": "section",
+  "stylesheet": "aiira.css",
+  "enabled_on": {
+    "templates": ["collection"]
+  },
+  "settings": [
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow",
+      "default": "Curated for you"
+    },
+    {
+      "type": "range",
+      "id": "products_per_page",
+      "label": "Products per page",
+      "min": 4,
+      "max": 24,
+      "step": 4,
+      "default": 12
+    },
+    {
+      "type": "text",
+      "id": "empty_text",
+      "label": "Empty collection message"
+    }
+  ]
+}
+{% endschema %}

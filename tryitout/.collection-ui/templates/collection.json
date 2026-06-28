@@ -1,0 +1,64 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "banner": {
+      "type": "main-collection-banner",
+      "settings": {
+        "show_collection_description": true,
+        "show_collection_image": false,
+        "color_scheme": "background-1"
+      },
+      "disabled": true
+    },
+    "product-grid": {
+      "type": "main-collection-product-grid",
+      "settings": {
+        "products_per_page": 16,
+        "columns_desktop": 3,
+        "image_ratio": "portrait",
+        "show_secondary_image": false,
+        "show_vendor": false,
+        "show_rating": false,
+        "enable_quick_add": false,
+        "enable_filtering": true,
+        "filter_type": "drawer",
+        "enable_sorting": true,
+        "columns_mobile": "2",
+        "padding_top": 36,
+        "padding_bottom": 36
+      },
+      "disabled": true
+    },
+    "atelier_collection_apps": {
+      "type": "apps",
+      "blocks": {
+        "tryitout_atelier_collection": {
+          "type": "shopify://apps/tryitout/blocks/atelier-collection/019f082c-a6e1-7b66-bcb9-3ee06845e0f0",
+          "settings": {
+            "eyebrow": "Curated for you",
+            "products_per_page": 12
+          }
+        }
+      },
+      "block_order": [
+        "tryitout_atelier_collection"
+      ],
+      "settings": {
+        "include_margins": false
+      }
+    }
+  },
+  "order": [
+    "atelier_collection_apps",
+    "banner",
+    "product-grid"
+  ]
+}

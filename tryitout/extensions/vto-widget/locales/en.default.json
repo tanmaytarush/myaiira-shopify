@@ -1,3 +1,14 @@
 {
-  "name": "Virtual Try-On"
+  "name": "Virtual Try-On",
+  "blocks": {
+    "look-outfit": {
+      "name": "Atelier Look"
+    },
+    "aiira-home": {
+      "name": "Atelier Home"
+    },
+    "atelier-collection": {
+      "name": "Atelier Collection"
+    }
+  }
 }
