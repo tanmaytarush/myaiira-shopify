@@ -1,0 +1,20 @@
+{% comment %}
+  Atelier header fonts + branding stylesheet (all storefront pages).
+{% endcomment %}
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link
+  href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,600;1,400&family=Inter:wght@400;500;600&display=swap"
+  rel="stylesheet"
+>
+<link
+  href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,300,0,0&display=swap"
+  rel="stylesheet"
+>
+{{ 'aiira-header.css' | asset_url | stylesheet_tag }}
+<style>
+  :root {
+    --aiira-font-display: 'EB Garamond', Georgia, serif;
+    --aiira-font-body: 'Inter', system-ui, sans-serif;
+  }
+</style>

@@ -1,58 +1,106 @@
-# Dev store setup (fix themeCreate 401)
+# Dev store setup
 
-If `shopify app dev` fails with:
+## Error: `Could not find or create a host theme for theme app extensions`
 
-```
-GraphQL Error (Code: 401): [API] Service is not valid for authentication
-... themeCreate ...
-```
+Your store has **Horizon** (not Dawn). The dev script now uses Horizon theme ID `189132800281`.
 
-the CLI could not create a host theme. Fix it once in the **browser** (no theme CLI needed):
-
-## 1. Add Dawn theme to the dev store
-
-1. [partners.shopify.com](https://partners.shopify.com) → **Stores** → **tryitout-dev** → **Log in**
-2. **Online Store** → **Themes**
-3. **Add theme** → **Try with free theme** → **Dawn** → **Add**
-4. (Optional) **Publish** Dawn, or leave it as an unpublished theme named **Dawn**
-
-## 2. Fresh CLI login
+### Fix (run once in your terminal)
 
 ```bash
 cd /Users/tanmaydikshit/myaiira/tryitout
 nvm use 20
-npx shopify auth logout
+npm run setup:theme-host
+```
+
+This pulls Horizon locally and creates a **development** host theme on the store.
+
+Then:
+
+```bash
 npm run dev
 ```
 
-Complete browser login when prompted. Use the **storefront password** from
-**Online Store → Preferences → Password protection** (or disable protection).
+Enter the **storefront password** when prompted (from **Online Store → Preferences → Password protection**, or disable protection).
 
-## 3. Use the Dawn host theme
+### If setup:theme-host fails
 
-`npm run dev` already passes `--theme Dawn` so the CLI reuses Dawn instead of
-calling `themeCreate`.
-
-If your theme has a different name, run:
-
-```bash
-npx shopify app dev -s tryitout-dev.myshopify.com --theme "Your Theme Name"
-```
-
-## 4. Admin-only dev (skip theme extension preview)
-
-If theme APIs still fail but you only need the embedded admin UI:
+Use admin-only dev (no theme extension hot-reload):
 
 ```bash
 npm run dev:admin
 ```
 
-## 5. Still failing?
+You can still add the **Virtual Try-On** block manually in **Online Store → Themes → Customize** on Horizon.
 
-Create a **new** development store under your Partner account (you as owner), then:
+### Themes on tryitout-dev
+
+| Name | Role | ID |
+|------|------|-----|
+| test-data | live | 189132833049 |
+| Horizon | unpublished | **189132800281** ← dev script uses this |
+| App Ext Host | unpublished | 189665607961 |
+
+### Other errors
+
+**themeCreate 401** — run `npx shopify auth logout`, then `npm run dev` and log in again.
+
+**No Dawn** — do not use `--theme Dawn`; use Horizon ID above or run `setup:theme-host`.
+
+## End-to-end try-on (local Remix, live Shopify storefront)
+
+**Root cause of `Job submit failed (404)`:** the Shopify CLI was not starting Remix because `shopify.web.toml` was missing (only `shopify.web.toml.liquid` existed). Without Remix, App Proxy kept forwarding to `ai.talentool.in`, which does not have the VTO POST route yet.
+
+Default `npm run dev` keeps the app proxy on **production** when using `shopify.app.toml` alone. Use the local config below.
+
+### 1. Stop the current dev server
+
+Press `q` in the terminal running `npm run dev` (must fully quit — port 9293 must be free).
+
+### 2. Start storefront-local dev
 
 ```bash
-npx shopify app dev -s YOUR-NEW-STORE.myshopify.com --theme Dawn
+cd /Users/tanmaydikshit/myaiira/tryitout
+nvm use 20
+npm run dev
 ```
 
-Invited org members sometimes lack theme API access on stores they did not create.
+Uses `shopify.app.local.toml` (tunnel + local app proxy). Remix uses **port 3010** (`PORT=3010`) so it does not conflict with other apps on 3000.
+
+**Do not use `--localhost-port`** — that enables localhost-only mode, which breaks App Proxy (try-on POST).
+
+If port 3010 is in use: `lsof -i :3010` and stop that process.
+
+### 3. Confirm the proxy points at your tunnel
+
+In the dev terminal, look for lines like:
+
+```text
+remix      │ …
+app_proxy  │ Using URL: https://<something>.trycloudflare.com/apps/myaiira
+```
+
+You must see a **`remix`** process starting (via `shopify.web.toml`). If you only see `vto-widget` and `app_proxy` pointing at `ai.talentool.in`, Remix is not running.
+
+If you still see `ai.talentool.in` or `shopify.dev/apps/default-app-home`, stop and restart `dev:storefront`.
+
+### 4. Run the shopper flow
+
+1. Open https://tryitout-dev.myshopify.com/products/chick-minimal (password: `detoh`)
+2. Click **Try this look**
+3. Upload a person photo (JPG/PNG)
+4. Wait ~5 seconds — mock backend returns the product image as the result
+5. In DevTools → Network, confirm:
+   - `POST /apps/myaiira/vto/jobs` → **202** with `{ job_id, status }`
+   - `GET /apps/myaiira/vto/jobs/<id>` → **200** until `status: "completed"`
+
+Mock mode is used when `MYAIIRA_API_BASE` and `MYAIIRA_API_KEY` are unset in `.env`.
+
+### 5. When finished testing
+
+While `dev:storefront` is running, Partner Dashboard URLs point at the tunnel. After you quit dev, restore production URLs with:
+
+```bash
+npm run deploy
+```
+
+That pushes `shopify.app.toml` (`ai.talentool.in`, fixed proxy) back to Shopify.

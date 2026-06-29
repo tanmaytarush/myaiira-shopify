@@ -1,0 +1,11 @@
+{% comment %}
+  Atelier shopper flow: home + VTO modal only (design/atelier).
+  Redirect legacy product/collection URLs to homepage try-on entry.
+{% endcomment %}
+{% unless request.design_mode %}
+  {% if template.name == 'product' or template.name == 'collection' or template.name == 'list-collections' %}
+    {% assign vto_entry = routes.root_url | append: '#try-on' %}
+    <script>window.location.replace({{ vto_entry | json }});</script>
+    <meta http-equiv="refresh" content="0;url={{ vto_entry }}">
+  {% endif %}
+{% endunless %}

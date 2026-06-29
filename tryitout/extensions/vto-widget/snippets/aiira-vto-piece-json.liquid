@@ -1,0 +1,21 @@
+{%- comment -%}
+  Emits one VTO outfit item JSON object for a Shopify product.
+  Usage: {% render 'aiira-vto-piece-json', piece: product %}
+{%- endcomment -%}
+{%- liquid
+  assign vto_sub_type = piece.metafields.custom.vto_sub_type.value
+  if vto_sub_type == blank
+    assign vto_sub_type = piece.type | handleize
+  endif
+  if vto_sub_type == blank
+    assign vto_sub_type = 'default'
+  endif
+  assign piece_image = piece.featured_image | image_url: width: 1200
+-%}
+{
+  "product_id": {{ piece.id | json }},
+  "product_handle": {{ piece.handle | json }},
+  "title": {{ piece.title | json }},
+  "item_image_url": {{ piece_image | json }},
+  "sub_type": {{ vto_sub_type | json }}
+}

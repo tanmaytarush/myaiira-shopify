@@ -4,3 +4,4 @@ public/build
 shopify-app-remix
 */*.yml
 .shopify
+scripts/n8n/vto-user-upload-s3-n8n-paste.js

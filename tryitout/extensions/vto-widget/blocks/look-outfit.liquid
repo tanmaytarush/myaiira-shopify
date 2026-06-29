@@ -1,0 +1,289 @@
+{%- render 'aiira-fonts' -%}
+<section class="aiira-look-pdp" {{ block.shopify_attributes }}>
+  <div class="aiira-look-pdp__inner">
+    <aside class="aiira-look-pdp__intro">
+      <h2 class="aiira-heading aiira-heading--italic">Styled for you</h2>
+      <p class="aiira-body">{{ block.settings.description | default: "A masterclass in contemporary silhouettes. This piece combines the heritage of Italian silk with a visionary approach to the modern evening gown. Each fold is a testament to the artisan's touch." }}</p>
+      <hr class="aiira-editorial-rule aiira-look-pdp__intro-rule" />
+      <div class="aiira-look-pdp__links">
+        <button type="button" class="aiira-look-pdp__link-row">
+          <span>Composition</span>
+          <span class="material-symbols-outlined">arrow_forward</span>
+        </button>
+        <button type="button" class="aiira-look-pdp__link-row">
+          <span>Care Guide</span>
+          <span class="material-symbols-outlined">arrow_forward</span>
+        </button>
+      </div>
+    </aside>
+
+    <section class="aiira-look-pdp__hero">
+      {% assign hero_media = product.featured_media | default: product.media.first %}
+      <div class="aiira-look-pdp__hero-frame">
+        {% if hero_media %}
+          <img
+            class="aiira-look-pdp__hero-img"
+            src="{{ hero_media | image_url: width: 1400 }}"
+            alt="{{ hero_media.alt | default: product.title | escape }}"
+            loading="eager"
+            width="700"
+            height="933"
+          />
+        {% else %}
+          <div class="aiira-look-pdp__hero-placeholder">{{ product.title | escape }}</div>
+        {% endif %}
+      </div>
+
+      {% if product.media.size > 1 %}
+        <div class="aiira-look-pdp__thumbs" aria-label="Product images">
+          {% for media in product.media limit: 4 %}
+            <button
+              type="button"
+              class="aiira-look-pdp__thumb{% if forloop.first %} is-active{% endif %}"
+              data-aiira-hero-src="{{ media | image_url: width: 1400 }}"
+              aria-label="View image {{ forloop.index }}"
+            >
+              <img
+                src="{{ media | image_url: width: 160 }}"
+                alt=""
+                width="96"
+                height="128"
+                loading="lazy"
+              />
+            </button>
+          {% endfor %}
+        </div>
+      {% endif %}
+    </section>
+
+    <aside class="aiira-look-pdp__shop">
+      <div>
+        <p class="aiira-look-pdp__vendor">{{ block.settings.vendor_eyebrow | default: "Atelier Signature" }}</p>
+        <h1 class="aiira-look-pdp__title">{{ product.title }}</h1>
+        <p class="aiira-look-pdp__price">
+          {{ product.selected_or_first_available_variant.price | money }}
+          {% unless product.selected_or_first_available_variant.available %}
+            <span class="aiira-look-pdp__badge">Sold out</span>
+          {% endunless %}
+        </p>
+      </div>
+
+      {% unless product.has_only_default_variant %}
+        <div class="aiira-look-pdp__sizes-wrap">
+          <p class="aiira-look-pdp__sizes-label">Select Size</p>
+          <div class="aiira-look-pdp__sizes" data-aiira-size-pills>
+            {% for variant in product.variants %}
+              <button
+                type="button"
+                class="aiira-look-pdp__size{% if variant == product.selected_or_first_available_variant %} is-active{% endif %}"
+                data-variant-id="{{ variant.id }}"
+                data-variant-price="{{ variant.price | money }}"
+                {% unless variant.available %}disabled{% endunless %}
+              >
+                {{ variant.title }}
+              </button>
+            {% endfor %}
+          </div>
+        </div>
+      {% endunless %}
+
+      {% form 'product', product, id: 'aiira-product-form', class: 'aiira-look-pdp__form' %}
+        {% if product.has_only_default_variant %}
+          <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}">
+        {% else %}
+          <div class="aiira-look-pdp__select-wrap">
+            <select id="aiira-variant-{{ block.id }}" name="id" class="aiira-look-pdp__select" data-aiira-variant-select>
+              {% for variant in product.variants %}
+                <option
+                  value="{{ variant.id }}"
+                  {% if variant == product.selected_or_first_available_variant %}selected{% endif %}
+                  {% unless variant.available %}disabled{% endunless %}
+                >
+                  {{ variant.title }} — {{ variant.price | money }}
+                </option>
+              {% endfor %}
+            </select>
+          </div>
+        {% endif %}
+
+        <button
+          type="submit"
+          name="add"
+          class="aiira-btn aiira-btn--wide aiira-look-pdp__add"
+          {% unless product.selected_or_first_available_variant.available %}disabled{% endunless %}
+        >
+          {% if product.selected_or_first_available_variant.available %}
+            {{ block.settings.add_button_label | default: "Add to bag" }}
+          {% else %}
+            Sold out
+          {% endif %}
+        </button>
+      {% endform %}
+
+      {% assign outfit_products = nil %}
+      {% if product.metafields.custom.vto_outfit_products.value != blank %}
+        {% assign outfit_products = product.metafields.custom.vto_outfit_products.value %}
+      {% elsif block.settings.outfit_products != blank %}
+        {% assign outfit_products = block.settings.outfit_products %}
+      {% elsif block.settings.outfit_collection != blank %}
+        {% assign outfit_products = block.settings.outfit_collection.products %}
+      {% endif %}
+
+      {% assign swap_pool = nil %}
+      {% if product.metafields.custom.vto_swap_pool.value != blank %}
+        {% assign swap_pool = product.metafields.custom.vto_swap_pool.value %}
+      {% elsif block.settings.swap_pool != blank %}
+        {% assign swap_pool = block.settings.swap_pool %}
+      {% endif %}
+      {% assign alternative_look_collections = block.settings.alternative_look_collections %}
+
+      {% capture aiira_outfit_json %}
+        {% render 'aiira-vto-outfit-data',
+          part: 'items',
+          outfit_products: outfit_products,
+          swap_pool: swap_pool,
+          alternative_look_collections: alternative_look_collections,
+          fallback_product: product
+        %}
+      {% endcapture %}
+      {% assign aiira_outfit_json = aiira_outfit_json | strip %}
+
+      {% capture aiira_outfit_alternatives_json %}
+        {% render 'aiira-vto-outfit-data',
+          part: 'alternatives',
+          outfit_products: outfit_products,
+          swap_pool: swap_pool,
+          alternative_look_collections: alternative_look_collections,
+          fallback_product: product
+        %}
+      {% endcapture %}
+      {% assign aiira_outfit_alternatives_json = aiira_outfit_alternatives_json | strip %}
+
+      <button
+        type="button"
+        class="aiira-btn aiira-btn--wide aiira-btn--outline aiira-look-pdp__try"
+        data-aiira-open-vto
+        data-product-id="{{ product.id }}"
+        data-product-title="{{ product.title | escape }}"
+        data-product-image="{{ product.featured_image | image_url: width: 800 }}"
+        data-product-price="{{ product.selected_or_first_available_variant.price }}"
+        data-product-currency="{{ cart.currency.iso_code }}"
+        data-product-vendor="{{ product.vendor | escape }}"
+        {% if aiira_outfit_json != blank %}
+          data-outfit-items='{{ aiira_outfit_json | strip }}'
+        {% endif %}
+        {% if aiira_outfit_alternatives_json != blank %}
+          data-outfit-alternatives='{{ aiira_outfit_alternatives_json | strip }}'
+        {% endif %}
+        {% if aiira_outfit_json == blank %}
+          disabled
+          title="Add look pieces: Theme editor → Atelier Look → Look pieces, or Admin → this product → metafield vto_outfit_products"
+        {% endif %}
+      >
+        <span class="material-symbols-outlined" style="font-size: 1rem;">view_in_ar</span>
+        {{ block.settings.try_button_label | default: "Try this look" }}
+      </button>
+
+      <div class="aiira-look-pdp__accordion">
+        {% assign desc_text = product.description | strip_html | strip %}
+        {% if desc_text != blank %}
+          <details class="aiira-look-pdp__details" open>
+            <summary>
+              Product Details
+              <span class="material-symbols-outlined">expand_more</span>
+            </summary>
+            <div class="aiira-look-pdp__details-body">{{ desc_text | truncate: 320 }}</div>
+          </details>
+          <hr class="aiira-editorial-rule" />
+        {% endif %}
+        <details class="aiira-look-pdp__details">
+          <summary>
+            Shipping &amp; Returns
+            <span class="material-symbols-outlined">expand_more</span>
+          </summary>
+          <div class="aiira-look-pdp__details-body">
+            {{ block.settings.shipping_text | default: "Complimentary express shipping on all orders. Returns accepted within 14 days of delivery. Custom bespoke adjustments available on request." }}
+          </div>
+        </details>
+      </div>
+    </aside>
+  </div>
+</section>
+
+{% render 'aiira-vto-loader' %}
+
+{% schema %}
+{
+  "name": "Atelier Look",
+  "target": "section",
+  "stylesheet": "aiira.css",
+  "enabled_on": {
+    "templates": ["product"]
+  },
+  "settings": [
+    {
+      "type": "textarea",
+      "id": "description",
+      "label": "Styled for you text"
+    },
+    {
+      "type": "text",
+      "id": "vendor_eyebrow",
+      "label": "Shop panel eyebrow",
+      "default": "Atelier Signature"
+    },
+    {
+      "type": "text",
+      "id": "add_button_label",
+      "label": "Add to bag label",
+      "default": "Add to bag"
+    },
+    {
+      "type": "text",
+      "id": "try_button_label",
+      "label": "Try button label",
+      "default": "Try this look"
+    },
+    {
+      "type": "header",
+      "content": "Look pieces (Shopify products)"
+    },
+    {
+      "type": "product_list",
+      "id": "outfit_products",
+      "label": "Look pieces",
+      "limit": 12,
+      "info": "Pick catalog products for this look. Connect via dynamic source to metafield custom.vto_outfit_products (recommended)."
+    },
+    {
+      "type": "collection",
+      "id": "outfit_collection",
+      "label": "Look pieces collection",
+      "info": "Fallback if metafield and list are empty."
+    },
+    {
+      "type": "collection_list",
+      "id": "alternative_look_collections",
+      "label": "Alternative full looks",
+      "limit": 6,
+      "info": "Each collection’s products = one preset in Change Pieces."
+    },
+    {
+      "type": "product_list",
+      "id": "swap_pool",
+      "label": "Extra swap pieces (theme override)",
+      "limit": 24,
+      "info": "Optional. Prefer metafield custom.vto_swap_pool on the look product."
+    },
+    {
+      "type": "paragraph",
+      "content": "Merchant setup: App → Look builder links Admin products. Garment slot = metafield custom.vto_sub_type (upperwear, lowerwear, footwear, bracelet, …). Shoppers combine pieces in Try-on → Change Pieces."
+    },
+    {
+      "type": "textarea",
+      "id": "shipping_text",
+      "label": "Shipping & returns copy"
+    }
+  ]
+}
+{% endschema %}

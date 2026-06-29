@@ -1,0 +1,55 @@
+{%- comment -%}
+  Builds outfit JSON for VTO. Output is captured by the parent block.
+
+  Params:
+  - part: "items" (default) | "alternatives"
+  - outfit_products, swap_pool, alternative_look_collections, fallback_product
+{%- endcomment -%}
+
+{%- liquid
+  assign output_part = part | default: 'items'
+  assign outfit_json = nil
+  assign alternatives_json = nil
+-%}
+
+{%- if output_part == 'items' -%}
+  {%- if outfit_products != blank and outfit_products.size > 0 -%}
+    {%- capture outfit_json -%}[{%- assign item_first = true -%}{%- for piece in outfit_products -%}{%- if piece.featured_image -%}{%- unless item_first -%},{%- endunless -%}{%- assign item_first = false -%}{%- render 'aiira-vto-piece-json', piece: piece -%}{%- endif -%}{%- endfor -%}]{%- endcapture -%}
+    {%- if outfit_json == '[]' -%}
+      {%- assign outfit_json = nil -%}
+    {%- endif -%}
+  {%- endif -%}
+
+  {%- if outfit_json == nil and fallback_product != blank -%}
+    {%- capture outfit_json -%}[{%- assign item_first = true -%}{%- assign media_index = 0 -%}{%- for media in fallback_product.media limit: 12 -%}{%- if media.media_type == 'image' -%}{%- unless item_first -%},{%- endunless -%}{%- assign item_first = false -%}{%- render 'aiira-vto-media-json', media: media, product: fallback_product, index: media_index -%}{%- assign media_index = media_index | plus: 1 -%}{%- endif -%}{%- endfor -%}]{%- endcapture -%}
+    {%- if outfit_json == '[]' -%}
+      {%- assign outfit_json = nil -%}
+    {%- endif -%}
+  {%- endif -%}
+
+  {{- outfit_json | strip -}}
+{%- else -%}
+  {%- capture alt_body -%}
+  {%- assign preset_first = true -%}
+  {%- if alternative_look_collections != blank -%}
+    {%- for look_collection in alternative_look_collections -%}
+      {%- if look_collection.products_count > 0 -%}
+        {%- unless preset_first -%},{%- endunless -%}
+        {%- assign preset_first = false -%}
+        {"name":{{ look_collection.title | json }},"items":[{%- assign item_first = true -%}{%- for piece in look_collection.products limit: 12 -%}{%- if piece.featured_image -%}{%- unless item_first -%},{%- endunless -%}{%- assign item_first = false -%}{%- render 'aiira-vto-piece-json', piece: piece -%}{%- endif -%}{%- endfor -%}]}
+      {%- endif -%}
+    {%- endfor -%}
+  {%- endif -%}
+  {%- if swap_pool != blank and swap_pool.size > 0 -%}
+    {%- unless preset_first -%},{%- endunless -%}
+    {"name":"Additional pieces","items":[{%- assign item_first = true -%}{%- for piece in swap_pool -%}{%- if piece.featured_image -%}{%- unless item_first -%},{%- endunless -%}{%- assign item_first = false -%}{%- render 'aiira-vto-piece-json', piece: piece -%}{%- endif -%}{%- endfor -%}]}
+  {%- endif -%}
+  {%- endcapture -%}
+
+  {%- assign alt_body = alt_body | strip -%}
+  {%- if alt_body != blank -%}
+    {%- assign alternatives_json = alt_body | prepend: '[' | append: ']' -%}
+  {%- endif -%}
+
+  {{- alternatives_json | strip -}}
+{%- endif -%}

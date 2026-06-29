@@ -14,9 +14,16 @@ database.sqlite
 .env
 .env.*
 
-package-lock.json
+scripts/n8n/vto-user-upload-s3-n8n-paste.js
+.header-branding/
+.live-restore/
+.vto-embed/
+.vto-embed-check/
+theme-branding/assets/aiira-vto-widget.js
 yarn.lock
 pnpm-lock.yaml
+
+/.theme-host
 
 /extensions/*/dist
 

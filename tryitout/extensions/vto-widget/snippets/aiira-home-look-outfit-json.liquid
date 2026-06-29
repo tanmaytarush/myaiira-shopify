@@ -1,0 +1,22 @@
+{%- comment -%}
+  Outfit JSON for a homepage trend look (design reference images).
+  Params: hero_url, acc1_url, acc2_url, look_title, acc1_label, acc2_label,
+          slot_garment, slot_acc1, slot_acc2
+{%- endcomment -%}
+[
+  {
+    "title": {{ look_title | json }},
+    "item_image_url": {{ hero_url | json }},
+    "sub_type": {{ slot_garment | json }}
+  },
+  {
+    "title": {{ acc1_label | json }},
+    "item_image_url": {{ acc1_url | json }},
+    "sub_type": {{ slot_acc1 | json }}
+  },
+  {
+    "title": {{ acc2_label | json }},
+    "item_image_url": {{ acc2_url | json }},
+    "sub_type": {{ slot_acc2 | json }}
+  }
+]

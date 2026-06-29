@@ -1,0 +1,463 @@
+{%- render 'aiira-fonts' -%}
+{%- comment -%} Atelier design reference images — preserved when theme settings are empty {%- endcomment -%}
+{%- assign design_looks = "
+  midnight_saree|Gilded Heritage|Satin Ascent|The Midnight Saree|Hand-woven charcoal silk with champagne accents.|https://lh3.googleusercontent.com/aida-public/AB6AXuA1_52VP7v5-Cux-x8pnj7tKal7gsg29UNkz0y9UJ1Zm-S9Lqzny1IDQRIlf622Tb0SOXBokbBctXffLkYsmLiTRYE5i-OMWn6xM8gqeMtQD8dHql6MmKCW8YrQGY1URzEVBenzSY6ekHBtpd3bgVd-O7RKIGNAJ_5Wvycm53SzrG6nLQRVRgVQkKu7NMngn1rzgUMttDtXkSJiFmuS2xIVJ9knhJemCwjqjbt1H5XuNICbolDk401hD945eu4QaRqX2dvzbviO7g4Z|https://lh3.googleusercontent.com/aida-public/AB6AXuBZ7QNPUxRy0IrKfAKIm_ig1WPKUNJDWwEVl_DfnxNxdbjM1YAktjkSbaig4yympiMSWOoRvMb7pZlvgor6hyFMTkQP23-GYE9wHmlWR9rDxnbKur3NL2XwDVsS2N6qHM6RtALimOKx6qDSkcoCddbkv5dBLXe_ZfxpQ8zwS1f1TyfFelAzeymsJdQ_k0Adjak2anG1Cb5ZryUOCT5VdESvCU6KjVdj3RS7FI3zsvIv8A8iSpz8Pd7mykDc7zCKZIl3yLBR_M6ytDJT|https://lh3.googleusercontent.com/aida-public/AB6AXuBV1ExvyVab1OD9wM-2pVoUc26CChsWsdzBMXsLb2rsSzm60ArdRcZIAkgbglBQdF1SF00bV6j1sfG29GBiNTpTOeIV6ekfMXq0qZ0CvEAhowhZFKKM3v4h5ZZiBL-k6WqBbpDMKZdHmJVvrKTSUO-b74Xfsm084mHeNoTXQZglk1lWExUexOl0tZ5OZ3_QZvlFhMPzBcKENnZZZei5VIu5siKBOJy5Ed4yxGfMEZz_enEnyiF8giq5Z72P0gKneXSgTR8-sJtxrLwb
+  ethereal_lehenga|Pearl Enclosure|Organza Veil|Ethereal Lehenga|Layered organza with custom champagne filigree.|https://lh3.googleusercontent.com/aida-public/AB6AXuA0eiz4s4u1_SRzC6a7wLB76Jt72VbBtuQALIOr3ZXbJZIjCrDPbJZ_su9zn1mKp9vzSOckn1EGjLWy7fj1IzL4ZeoAMP1e5N8kDyrwf2WIwBkd7pemnGkOAd8E5lHFQPC8n8FuYYFSIB8U_NZktb_dnc2tI2OLvcCm722z9dX45XyjT6HdCYxEWiOeoOlE67SDzVgrT_GiaWQwiEl4QtpKiQY4RKyXo1Vuw38iU7IlIf8Kh0npm-QpuMFmnw9u20X0AmRHY6kwwnlP|https://lh3.googleusercontent.com/aida-public/AB6AXuAU1b4Wnqgg9Sln2r2k5kfQdgbkO3WnlnDKLgTzNkbDGiNYcpZhsFiHYxwsN2h-DzNFUzg1blC7YTFWswIpf23T9f73njwh_DNBqWQCz5zJEuwggAHTGfsOnxFR7QB08ub_qgH6FJdfqFL6cZAI5rTa4IVpsv6PbG8rZRQz33K4KW_0KNsQNk3YdaeMFTWCVnFwNxDCcG2WbiIE4ndmzXcwJGJ-hlEcczBKq4AOy16bb-DUuaY9nkM-MbVyqccYl_xHs9jXQ3PoLOvv|https://lh3.googleusercontent.com/aida-public/AB6AXuDcOy7-ktkuKrocrKIcoGlf1vCHDTgiks4_2T8sxWAXJ0Ufadzr93QOvhdEitN_7iHQCgEG9TAY9m3yB6oz3sRFOIGQ3YhWjUmrJ9UG68mBAilT04q8LFX-wkbaRwyPB6HCZ0zHLtTxa681DmNo-ObY_I_ObPDQVo12LrfyhlAdjGSBPwzIC5bev5PRwIJYHWjHghVh3AemLyo12UrMCk3lKHhCjA6fhE4SUtUE2IOqNZqIixwQzjw-XDEAb_DiUKC1lMSQXsemPn9m
+  architectural_gown|Form & Light|Temporal Gold|Architectural Gown|Structural obsidian wool with gold molding.|https://lh3.googleusercontent.com/aida-public/AB6AXuCx_51UBwKjKf1FTGcJHqUghjgzi9bDWIQQXlh_agDPmH_W3TJ9TJzji3pxw78jr-hMdsLiaJ311HNYskf-_W0apvqhvZ5bgHNxDGe-Ddki3RWPNu2ph5xFr4qCm9i08j_kVXZMJpMI3Kmhjkj2nc7ng_NF_77fkXvqDoXvQOmXse8CCmVXj44tlepIzgIAt-WA6P2ps8fm82VzGWdnF7wN5n7dNLKsL6E4PLi94P0d53OEmWkMSiRhuGRlgNBgf6opBSJ0l-KGZeM7|https://lh3.googleusercontent.com/aida-public/AB6AXuDb3i2xVPi2Dpu9ZwM_DcfhaXx-V7a0DmRydr4WWgqrsxlDPUVqj8cChhskXSE_45On-aGCiBmkM_Evn4zgvPeXL8xjrV1imazS_CIZZ81W3ltcBHKiAjY52IIKyrXhrMymhgRVudSUDAqro2i7RVhBZGSbTKzY3wPFkEO5H0Zi3rj0SUSdnirtod3InfGrQjaqFRsniO38Hirr2EPYYR_T4MZAFH5SXEtQB7mKaCb56IL1C9Lg652OfEwP3WAN8MMzJe65prPLxSNT|https://lh3.googleusercontent.com/aida-public/AB6AXuDU8V_-lZmvJA3dBFHMoKct8tflXU8CWNuJJMW1SpHeZ0UO5tFNqpmzLQMMv8fYL7V8Iq3JFXDb3Y3mYnBJqILpIeG46NnGDbP7fzMh0KgbY6CUiMENsrQs10R3TscWdN8oxXgAQuSAw54pdW8pbt0F4Y3CISXNLMZToLQlUBpHppMkRq1UNo8g9IAm78fh-vbWQNJpqhQHlfoSoORun9n97jeKE9f1dtK4KZasgYWIA7TE1Fx5Gb7-C4UADdepV2x1oKOUar9LDZKD
+" | strip | split: "
+" -%}
+
+{%- assign design_bespoke_img = "https://lh3.googleusercontent.com/aida-public/AB6AXuAURFCeQqumXXlfBJr4s291yPeYaXzVbHHdiwcybpBlEo5QH5nm7ezdDo83twyIMkEkqWBbzvYfL1fp9oQr2cImFXRKmQlRhMJ8mc9952Yg8uVBEY8h9bE64xKHH43oTJPVja8DwuumYEwNbFpWoSZ-sfBMQXPGjskcZJOJvXBh3Mssl4kcs5G0YFDw-WWc7dzUJpJuFwfCe46p5huh4X9QcO_-BfDpi8mYKWFDnLA80llquqNXTHwAy1pqGNzjh8hJLbhCJitRbYl6" -%}
+
+{%- assign look_slot_profiles = "saree,earrings,necklace|lehenga,bracelet,footwear|dress,handbag,footwear" | split: "|" -%}
+
+{%- assign vto_product = block.settings.styling_product -%}
+{%- if vto_product == blank -%}
+  {%- assign vto_product = all_products["chick-minimal"] -%}
+{%- endif -%}
+
+{%- assign vto_product_id = vto_product.id | default: "home-vto" -%}
+{%- assign vto_product_title = vto_product.title | default: "Atelier Look" -%}
+{%- assign vto_product_image = vto_product.featured_image | image_url: width: 800 | default: "" -%}
+{%- assign vto_product_price = vto_product.selected_or_first_available_variant.price | default: 0 -%}
+{%- assign vto_product_vendor = vto_product.vendor | default: shop.name -%}
+
+<section class="aiira-section aiira-landing" {{ block.shopify_attributes }} id="aiira-home">
+  <div class="aiira-landing__hero">
+    <div>
+      <p class="aiira-eyebrow">{{ block.settings.hero_eyebrow | default: "Curation 01" }}</p>
+      <h1 class="aiira-heading">{{ block.settings.heading | default: "Seasonal Poetry:" }}<br/>{{ block.settings.heading_em | default: "The Modern Heritage" }}</h1>
+    </div>
+    <div class="aiira-landing__brand-row">
+      {%- if shop.logo != blank -%}
+        <img class="aiira-landing__logo-img" src="{{ shop.logo | image_url: width: 64 }}" alt="{{ shop.name | escape }}" width="64" height="64" />
+      {%- endif -%}
+      <p class="aiira-landing__tagline">{{ block.settings.tagline | default: "Defining the future of luxury fitting." }}</p>
+    </div>
+  </div>
+
+  <div class="aiira-trends" id="aiira-trends">
+    <div class="aiira-trends__header">
+      <h2 class="aiira-heading aiira-heading--md">{{ block.settings.trends_heading | default: "Top Trends" }}</h2>
+      <div class="aiira-trends__nav">
+        <button type="button" class="aiira-trends__nav-btn" data-aiira-carousel-prev aria-label="Previous look">
+          <span class="material-symbols-outlined">chevron_left</span>
+        </button>
+        <button type="button" class="aiira-trends__nav-btn" data-aiira-carousel-next aria-label="Next look">
+          <span class="material-symbols-outlined">chevron_right</span>
+        </button>
+      </div>
+    </div>
+
+    <div class="aiira-trends__viewport" data-aiira-trends-viewport>
+      <div class="aiira-trends__marquee" data-aiira-trends-marquee>
+      {% for i in (1..3) %}
+        {% assign idx = forloop.index0 %}
+        {% assign design_row = design_looks[idx] | strip | split: "|" %}
+        {% assign title_key = 'look_' | append: i | append: '_title' %}
+        {% assign subtitle_key = 'look_' | append: i | append: '_subtitle' %}
+        {% assign hero_key = 'look_' | append: i | append: '_hero' %}
+        {% assign acc1_key = 'look_' | append: i | append: '_acc1' %}
+        {% assign acc2_key = 'look_' | append: i | append: '_acc2' %}
+        {% assign acc1_label_key = 'look_' | append: i | append: '_acc1_label' %}
+        {% assign acc2_label_key = 'look_' | append: i | append: '_acc2_label' %}
+
+        {% assign look_title = block.settings[title_key] | default: design_row[3] %}
+        {% assign look_subtitle = block.settings[subtitle_key] | default: design_row[4] %}
+        {% assign acc1_label = block.settings[acc1_label_key] | default: design_row[1] %}
+        {% assign acc2_label = block.settings[acc2_label_key] | default: design_row[2] %}
+        {% assign hero_img = block.settings[hero_key] %}
+        {% assign acc1_img = block.settings[acc1_key] %}
+        {% assign acc2_img = block.settings[acc2_key] %}
+
+        {% if hero_img != blank %}
+          {% assign hero_url = hero_img | image_url: width: 900 %}
+        {% else %}
+          {% assign hero_url = design_row[7] %}
+        {% endif %}
+        {% if acc1_img != blank %}
+          {% assign acc1_url = acc1_img | image_url: width: 240 %}
+        {% else %}
+          {% assign acc1_url = design_row[5] %}
+        {% endif %}
+        {% if acc2_img != blank %}
+          {% assign acc2_url = acc2_img | image_url: width: 240 %}
+        {% else %}
+          {% assign acc2_url = design_row[6] %}
+        {% endif %}
+
+        {% assign slot_row = look_slot_profiles[idx] | split: "," %}
+        {% capture look_outfit_json %}
+          {% render "aiira-home-look-outfit-json",
+            hero_url: hero_url,
+            acc1_url: acc1_url,
+            acc2_url: acc2_url,
+            look_title: look_title,
+            acc1_label: acc1_label,
+            acc2_label: acc2_label,
+            slot_garment: slot_row[0],
+            slot_acc1: slot_row[1],
+            slot_acc2: slot_row[2]
+          %}
+        {% endcapture %}
+        {% assign look_outfit_json = look_outfit_json | strip %}
+
+        {% if forloop.first %}
+          {% assign default_look_outfit_json = look_outfit_json %}
+          {% assign default_look_title = look_title %}
+          {% assign default_look_hero_url = hero_url %}
+        {% endif %}
+
+        <article class="aiira-look-card">
+          <div class="aiira-look-card__grid">
+            <div class="aiira-look-card__accessories">
+              <div class="aiira-look-card__acc-item">
+                <div class="aiira-look-card__acc-frame aiira-look-card__acc-frame--portrait">
+                  {% if acc1_img != blank %}
+                    <img src="{{ acc1_img | image_url: width: 240 }}" alt="{{ acc1_label | escape }}" loading="lazy" width="120" height="160" />
+                  {% else %}
+                    <img src="{{ design_row[5] }}" alt="{{ acc1_label | escape }}" loading="lazy" width="120" height="160" />
+                  {% endif %}
+                </div>
+                <p class="aiira-look-card__acc-label">{{ acc1_label }}</p>
+              </div>
+              <div class="aiira-look-card__acc-item">
+                <div class="aiira-look-card__acc-frame aiira-look-card__acc-frame--square">
+                  {% if acc2_img != blank %}
+                    <img src="{{ acc2_img | image_url: width: 240 }}" alt="{{ acc2_label | escape }}" loading="lazy" width="120" height="120" />
+                  {% else %}
+                    <img src="{{ design_row[6] }}" alt="{{ acc2_label | escape }}" loading="lazy" width="120" height="120" />
+                  {% endif %}
+                </div>
+                <p class="aiira-look-card__acc-label">{{ acc2_label }}</p>
+              </div>
+            </div>
+            <div class="aiira-look-card__hero-wrap">
+              <div class="aiira-look-card__hero-frame">
+                {% if hero_img != blank %}
+                  <img src="{{ hero_img | image_url: width: 900 }}" alt="{{ look_title | escape }}" loading="lazy" width="720" height="900" />
+                {% else %}
+                  <img src="{{ design_row[7] }}" alt="{{ look_title | escape }}" loading="lazy" width="720" height="900" />
+                {% endif %}
+              </div>
+              <div class="aiira-look-card__overlay">
+                <div>
+                  <h3 class="aiira-look-card__overlay-title">{{ look_title }}</h3>
+                  <p class="aiira-look-card__overlay-desc">{{ look_subtitle }}</p>
+                </div>
+                <button
+                  type="button"
+                  class="aiira-btn"
+                  data-aiira-open-vto
+                  {% if forloop.first %}data-aiira-vto-default{% endif %}
+                  data-product-id="{{ vto_product_id }}"
+                  data-product-title="{{ look_title | escape }}"
+                  data-product-image="{{ hero_url }}"
+                  data-product-price="{{ vto_product_price }}"
+                  data-product-currency="{{ cart.currency.iso_code }}"
+                  data-product-vendor="{{ vto_product_vendor | escape }}"
+                  data-outfit-items='[]'
+                >
+                  Try this look
+                </button>
+              </div>
+            </div>
+          </div>
+        </article>
+      {% endfor %}
+      </div>
+    </div>
+  </div>
+
+  <section class="aiira-bespoke" id="aiira-bespoke">
+    <div class="aiira-bespoke__grid">
+      <div class="aiira-bespoke__visual">
+        {% if block.settings.bespoke_image != blank %}
+          <img
+            class="aiira-bespoke__image"
+            src="{{ block.settings.bespoke_image | image_url: width: 1200 }}"
+            alt=""
+            loading="lazy"
+            width="800"
+            height="450"
+          />
+        {% else %}
+          <img
+            class="aiira-bespoke__image"
+            src="{{ design_bespoke_img }}"
+            alt="Master tailor's atelier workspace"
+            loading="lazy"
+            width="800"
+            height="450"
+          />
+        {% endif %}
+        <div class="aiira-bespoke__stamp">
+          <p>Crafting your unique narrative since 1994.</p>
+        </div>
+      </div>
+      <div class="aiira-bespoke__copy">
+        <p class="aiira-eyebrow">{{ block.settings.bespoke_eyebrow | default: "The Atelier Experience" }}</p>
+        <h2 class="aiira-heading">Your Private<br/>Fitting Room</h2>
+        <p class="aiira-body aiira-body--lg">{{ block.settings.bespoke_body | default: "Experience the fusion of high-fashion authority and AI-driven precision. Each garment is curated, fitted, and perfected for your specific silhouette." }}</p>
+        <div class="aiira-bespoke__actions">
+          <button
+            type="button"
+            class="aiira-btn"
+            data-aiira-open-vto
+            data-product-id="{{ vto_product_id }}"
+            data-product-title="{{ default_look_title | default: vto_product_title | escape }}"
+            data-product-image="{{ default_look_hero_url | default: vto_product_image }}"
+            data-product-price="{{ vto_product_price }}"
+            data-product-currency="{{ cart.currency.iso_code }}"
+            data-product-vendor="{{ vto_product_vendor | escape }}"
+            data-outfit-items='[]'
+          >
+            {{ block.settings.cta_label | default: "Start Virtual Try-On" }}
+          </button>
+          <button type="button" class="aiira-btn aiira-btn--outline" data-aiira-scroll-target="#aiira-bespoke">
+            {{ block.settings.consult_label | default: "Book Consultation" }}
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="aiira-footer">
+    <div class="aiira-footer__grid">
+      <div class="aiira-footer__brand">
+        <a class="aiira-footer__brand-name" href="{{ routes.root_url }}">Atelier</a>
+        <p class="aiira-footer__brand-desc">Redefining luxury through the lens of modern heritage and artificial intelligence.</p>
+        <div class="aiira-footer__social">
+          <a class="aiira-footer__social-btn" href="#" aria-label="Share">
+            <span class="material-symbols-outlined">share</span>
+          </a>
+          <a class="aiira-footer__social-btn" href="mailto:" aria-label="Email">
+            <span class="material-symbols-outlined">mail</span>
+          </a>
+        </div>
+      </div>
+      <div class="aiira-footer__nav-col">
+        <p class="aiira-footer__nav-heading">Experience</p>
+        <ul class="aiira-footer__nav-list">
+          <li><a href="{{ routes.root_url }}">Home</a></li>
+          <li><a href="{{ routes.root_url }}#try-on">Virtual Try-On</a></li>
+        </ul>
+      </div>
+      <div class="aiira-footer__signup">
+        <p class="aiira-footer__nav-heading">Join the Atelier</p>
+        <p class="aiira-footer__signup-desc">Be the first to know about new collections and private exhibitions.</p>
+        {%- form 'customer', id: 'atelier-footer-form', class: 'aiira-footer__signup-form' -%}
+          <input type="hidden" name="contact[tags]" value="newsletter" />
+          <input class="aiira-footer__signup-input" type="email" name="contact[email]" placeholder="Email Address" autocomplete="email" required />
+          <button class="aiira-footer__signup-btn" type="submit" aria-label="Subscribe">
+            <span class="material-symbols-outlined">arrow_forward</span>
+          </button>
+        {%- endform -%}
+      </div>
+    </div>
+    <div class="aiira-footer__bottom">
+      <p>© 2024 Atelier. All rights reserved.</p>
+      <p>Designed for the Discriminating.</p>
+    </div>
+  </footer>
+</section>
+
+{% render 'aiira-storefront-catalog' %}
+{% render 'aiira-vto-loader' %}
+
+{% schema %}
+{
+  "name": "Atelier Home",
+  "target": "section",
+  "stylesheet": "aiira.css",
+  "enabled_on": {
+    "templates": ["index"]
+  },
+  "settings": [
+    {
+      "type": "text",
+      "id": "hero_eyebrow",
+      "label": "Hero eyebrow",
+      "default": "Curation 01"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Hero heading",
+      "default": "Seasonal Poetry:"
+    },
+    {
+      "type": "text",
+      "id": "heading_em",
+      "label": "Hero heading (second line)",
+      "default": "The Modern Heritage"
+    },
+    {
+      "type": "text",
+      "id": "tagline",
+      "label": "Brand tagline",
+      "default": "Defining the future of luxury fitting."
+    },
+    {
+      "type": "text",
+      "id": "trends_heading",
+      "label": "Trends heading",
+      "default": "Top Trends"
+    },
+    {
+      "type": "header",
+      "content": "Styling entry point"
+    },
+    {
+      "type": "product",
+      "id": "styling_product",
+      "label": "Primary styling product",
+      "info": "Shopify product used for VTO job API (product_id). Recommended: chick-minimal."
+    },
+    {
+      "type": "header",
+      "content": "Look 1 — The Midnight Saree"
+    },
+    {
+      "type": "text",
+      "id": "look_1_title",
+      "label": "Title"
+    },
+    {
+      "type": "text",
+      "id": "look_1_subtitle",
+      "label": "Subtitle"
+    },
+    {
+      "type": "image_picker",
+      "id": "look_1_hero",
+      "label": "Hero image"
+    },
+    {
+      "type": "image_picker",
+      "id": "look_1_acc1",
+      "label": "Accessory 1"
+    },
+    {
+      "type": "image_picker",
+      "id": "look_1_acc2",
+      "label": "Accessory 2"
+    },
+    {
+      "type": "url",
+      "id": "look_1_link",
+      "label": "View look link"
+    },
+    {
+      "type": "header",
+      "content": "Look 2 — Ethereal Lehenga"
+    },
+    {
+      "type": "text",
+      "id": "look_2_title",
+      "label": "Title"
+    },
+    {
+      "type": "text",
+      "id": "look_2_subtitle",
+      "label": "Subtitle"
+    },
+    {
+      "type": "image_picker",
+      "id": "look_2_hero",
+      "label": "Hero image"
+    },
+    {
+      "type": "image_picker",
+      "id": "look_2_acc1",
+      "label": "Accessory 1"
+    },
+    {
+      "type": "image_picker",
+      "id": "look_2_acc2",
+      "label": "Accessory 2"
+    },
+    {
+      "type": "url",
+      "id": "look_2_link",
+      "label": "View look link"
+    },
+    {
+      "type": "header",
+      "content": "Look 3 — Architectural Gown"
+    },
+    {
+      "type": "text",
+      "id": "look_3_title",
+      "label": "Title"
+    },
+    {
+      "type": "text",
+      "id": "look_3_subtitle",
+      "label": "Subtitle"
+    },
+    {
+      "type": "image_picker",
+      "id": "look_3_hero",
+      "label": "Hero image"
+    },
+    {
+      "type": "image_picker",
+      "id": "look_3_acc1",
+      "label": "Accessory 1"
+    },
+    {
+      "type": "image_picker",
+      "id": "look_3_acc2",
+      "label": "Accessory 2"
+    },
+    {
+      "type": "url",
+      "id": "look_3_link",
+      "label": "View look link"
+    },
+    {
+      "type": "header",
+      "content": "Bespoke section"
+    },
+    {
+      "type": "image_picker",
+      "id": "bespoke_image",
+      "label": "Atelier image"
+    },
+    {
+      "type": "text",
+      "id": "bespoke_eyebrow",
+      "label": "Eyebrow",
+      "default": "The Atelier Experience"
+    },
+    {
+      "type": "textarea",
+      "id": "bespoke_body",
+      "label": "Body copy"
+    },
+    {
+      "type": "text",
+      "id": "cta_label",
+      "label": "Primary CTA",
+      "default": "Start Virtual Try-On"
+    },
+    {
+      "type": "url",
+      "id": "cta_link",
+      "label": "Primary CTA link (optional override)"
+    },
+    {
+      "type": "text",
+      "id": "consult_label",
+      "label": "Secondary CTA",
+      "default": "Book Consultation"
+    },
+    {
+      "type": "url",
+      "id": "consult_link",
+      "label": "Secondary CTA link"
+    }
+  ]
+}
+{% endschema %}

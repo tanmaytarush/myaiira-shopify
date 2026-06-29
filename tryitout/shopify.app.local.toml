@@ -1,4 +1,6 @@
-# Learn more about configuring your app at https://shopify.dev/docs/apps/tools/cli/configuration
+# Local E2E: CLI tunnel + app proxy → your laptop (not ai.talentool.in).
+# Use: npm run dev:storefront
+# Production deploy still uses shopify.app.toml (automatically_update_urls_on_dev = false).
 
 client_id = "e9e8392f9b38ee2bc3659802d82355b9"
 name = "tryitout"
@@ -6,13 +8,12 @@ application_url = "https://ai.talentool.in"
 embedded = true
 
 [build]
-automatically_update_urls_on_dev = false
+automatically_update_urls_on_dev = true
 
 [webhooks]
 api_version = "2026-07"
 
 [access_scopes]
-# Learn more at https://shopify.dev/docs/apps/tools/cli/configuration#access_scopes
 scopes = "read_products,write_products,write_app_proxy,read_themes,write_themes"
 
 [product.metafields.custom.vto_outfit_products]

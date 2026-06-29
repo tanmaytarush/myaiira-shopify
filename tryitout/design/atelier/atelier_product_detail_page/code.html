@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Atelier | Luxury Product Detail</title>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=EB+Garamond:ital,wght@0,400;0,600;1,400&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind Configuration -->
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "surface-dim": "#dbdad9",
+                    "on-secondary": "#ffffff",
+                    "inverse-primary": "#c9c6c5",
+                    "on-tertiary-fixed-variant": "#454747",
+                    "on-secondary-fixed-variant": "#59431b",
+                    "inverse-surface": "#303031",
+                    "on-primary-container": "#858383",
+                    "background": "#fbf9f8",
+                    "secondary": "#735a30",
+                    "on-secondary-container": "#785f34",
+                    "surface-container-high": "#e9e8e7",
+                    "tertiary-fixed": "#e2e2e2",
+                    "on-background": "#1b1c1c",
+                    "on-primary": "#ffffff",
+                    "secondary-fixed-dim": "#e3c28e",
+                    "surface-variant": "#e4e2e2",
+                    "on-primary-fixed": "#1c1b1b",
+                    "on-error": "#ffffff",
+                    "surface": "#fbf9f8",
+                    "surface-bright": "#fbf9f8",
+                    "primary-fixed-dim": "#c9c6c5",
+                    "surface-container-lowest": "#ffffff",
+                    "primary": "#000000",
+                    "surface-dim": "#dbdad9",
+                    "tertiary": "#000000",
+                    "primary-container": "#1c1b1b",
+                    "surface-tint": "#5f5e5e",
+                    "primary-fixed": "#e5e2e1",
+                    "tertiary-fixed-dim": "#c6c6c7",
+                    "on-tertiary-container": "#838484",
+                    "on-tertiary-fixed": "#1a1c1c",
+                    "on-surface": "#1b1c1c",
+                    "outline-variant": "#c4c7c7",
+                    "secondary-fixed": "#ffdeab",
+                    "on-error-container": "#93000a",
+                    "on-surface-variant": "#444748",
+                    "on-secondary-fixed": "#271900",
+                    "on-primary-fixed-variant": "#474646",
+                    "tertiary-container": "#1a1c1c",
+                    "outline": "#747878",
+                    "on-tertiary": "#ffffff",
+                    "error-container": "#ffdad6",
+                    "secondary-container": "#fddba6",
+                    "surface-container-highest": "#e4e2e2",
+                    "surface-container": "#efeded",
+                    "inverse-on-surface": "#f2f0f0",
+                    "error": "#ba1a1a"
+            },
+            "borderRadius": {
+                    "DEFAULT": "1rem",
+                    "lg": "2rem",
+                    "xl": "3rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "margin-desktop": "64px",
+                    "margin-mobile": "20px",
+                    "unit": "8px",
+                    "gutter": "24px",
+                    "container-max": "1440px"
+            },
+            "fontFamily": {
+                    "body-lg": ["Inter"],
+                    "label-sm": ["Inter"],
+                    "display-lg-mobile": ["EB Garamond"],
+                    "display-lg": ["EB Garamond"],
+                    "headline-md": ["EB Garamond"],
+                    "eyebrow-uppercase": ["Inter"],
+                    "body-md": ["Inter"]
+            },
+            "fontSize": {
+                    "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                    "label-sm": ["13px", {"lineHeight": "18px", "fontWeight": "500"}],
+                    "display-lg-mobile": ["40px", {"lineHeight": "1.2", "letterSpacing": "-0.01em", "fontWeight": "400"}],
+                    "display-lg": ["64px", {"lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "400"}],
+                    "headline-md": ["32px", {"lineHeight": "1.3", "fontWeight": "400"}],
+                    "eyebrow-uppercase": ["12px", {"lineHeight": "16px", "letterSpacing": "0.15em", "fontWeight": "600"}],
+                    "body-md": ["15px", {"lineHeight": "24px", "fontWeight": "400"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        body {
+            background-color: #fbf9f8;
+            color: #1b1c1c;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+        .crossfade-img {
+            transition: opacity 0.8s ease-in-out;
+        }
+        .editorial-rule {
+            height: 1px;
+            background-color: #e4e2e2;
+            width: 100%;
+        }
+        ::-webkit-scrollbar {
+            width: 4px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #fbf9f8;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #dbdad9;
+        }
+    </style>
+</head>
+<body class="font-body-md text-body-md selection:bg-secondary-container">
+<!-- TopNavBar -->
+<header class="bg-surface dark:bg-background border-b border-outline-variant dark:border-on-surface-variant sticky top-0 z-50">
+<div class="flex justify-between items-center w-full px-margin-desktop py-6 max-w-container-max mx-auto">
+<div class="flex-1 flex items-center gap-12">
+<a class="font-headline-md text-headline-md uppercase tracking-widest text-primary dark:text-on-background" href="#">Atelier</a>
+<nav class="hidden md:flex gap-8 items-center">
+<a class="text-primary dark:text-on-background font-semibold border-b-2 border-primary dark:border-on-background pb-1 font-label-sm text-label-sm" href="#">Collections</a>
+<a class="text-on-surface-variant dark:text-outline-variant hover:text-primary dark:hover:text-on-background transition-colors font-label-sm text-label-sm" href="#">Bespoke</a>
+<a class="text-on-surface-variant dark:text-outline-variant hover:text-primary dark:hover:text-on-background transition-colors font-label-sm text-label-sm" href="#">Atelier AI</a>
+<a class="text-on-surface-variant dark:text-outline-variant hover:text-primary dark:hover:text-on-background transition-colors font-label-sm text-label-sm" href="#">Sustainability</a>
+</nav>
+</div>
+<div class="flex items-center gap-6">
+<button class="hover:opacity-70 transition-opacity duration-300">
+<span class="material-symbols-outlined" data-icon="shopping_bag">shopping_bag</span>
+</button>
+<button class="hover:opacity-70 transition-opacity duration-300">
+<span class="material-symbols-outlined" data-icon="person">person</span>
+</button>
+</div>
+</div>
+</header>
+<main class="max-w-container-max mx-auto px-margin-desktop py-12 md:py-20 min-h-screen">
+<div class="grid grid-cols-1 md:grid-cols-12 gap-gutter lg:gap-16">
+<!-- Column 1: Intro Copy -->
+<aside class="md:col-span-3 flex flex-col justify-start pt-12">
+<div class="sticky top-32">
+<h2 class="font-headline-md text-headline-md italic mb-6">Styled for you</h2>
+<p class="text-on-surface-variant leading-relaxed max-w-xs mb-8">
+                        A masterclass in contemporary silhouettes. This piece combines the heritage of Italian silk with a visionary approach to the modern evening gown. Each fold is a testament to the artisan's touch.
+                    </p>
+<div class="editorial-rule mb-8"></div>
+<div class="space-y-4">
+<div class="flex justify-between items-center group cursor-pointer">
+<span class="font-eyebrow-uppercase text-eyebrow-uppercase uppercase tracking-widest">Composition</span>
+<span class="material-symbols-outlined text-sm group-hover:translate-x-1 transition-transform">arrow_forward</span>
+</div>
+<div class="flex justify-between items-center group cursor-pointer">
+<span class="font-eyebrow-uppercase text-eyebrow-uppercase uppercase tracking-widest">Care Guide</span>
+<span class="material-symbols-outlined text-sm group-hover:translate-x-1 transition-transform">arrow_forward</span>
+</div>
+</div>
+</div>
+</aside>
+<!-- Column 2: Hero Image & Thumbnails -->
+<section class="md:col-span-5 flex flex-col items-center">
+<div class="relative w-full aspect-[3/4] overflow-hidden bg-surface-container mb-8">
+<img class="w-full h-full object-cover crossfade-img" data-alt="A cinematic full-length shot of a breathtaking luxury evening gown crafted from shimmering midnight blue silk. The gown features an asymmetrical neckline and a dramatic floor-sweeping train, draped elegantly over a minimalist white marble pedestal. The lighting is soft and directional, casting subtle shadows that highlight the garment's rich texture and fluid motion in a high-fashion editorial style." id="hero-image" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA1u7QtSsw0wyZWCxdH7LXwEz4GQ6mu1joNbgFH6SUuonDxAVpy2Iim95iDrqyIEfReP2MWsJb2WZu5guFSKCIiA7sjcHD6sFA1HzXAOyppNMnxnjwTfPOOZp3jI0iwgygy4DiTOEI1Xqiit-bm2KhDdRz7mUWiKGz55hXl8IHfy9HbwK5459H3Qj5tHnZk701Ep0RBVxuTWsgzXym7UNnlAsXKtDEJl492GNyeF2v30kXR2v7_BYioIhUTMVsglUa2JGTL3GlL-whM"/>
+</div>
+<div class="flex gap-4 w-full overflow-x-auto pb-4 scrollbar-hide no-scrollbar">
+<button class="flex-shrink-0 w-24 aspect-[3/4] border border-primary overflow-hidden transition-all duration-300 active:scale-95" onclick="changeHero(this)">
+<img class="w-full h-full object-cover" data-alt="Close-up detail of the luxury midnight blue gown's bodice, showing the intricate hand-stitched silk pleats and the subtle sheen of the fabric under soft studio lights. The composition is artistic and minimalist, emphasizing craftsmanship and material quality in a clean light-mode environment." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAZr9msQ3pTdYgUdZyv3NIuyRqESVAFmh5yiJ671BPSXxZUJYLwoyUx15bWPg1Z1naJzaxCYOhKoW0dFCxNrf3b2kLYBubb6_qrxq8wRewWoHMl5zuVZP6woT9TG0rtl6AKiR5J7EwzXv0bc6Bqj6qAiPwboKQJb4oRH7gnJ3wzl3v_ZUNAg95MsN_EOB4DN5kn6tVkvdpu57PUpIh3EtcBovFpPZ3nXUCb7pzJlH_F8IeH-Ba0ggInrEPPwF_TGI5QsjIfz8JV7r0r"/>
+</button>
+<button class="flex-shrink-0 w-24 aspect-[3/4] border border-transparent hover:border-outline-variant overflow-hidden transition-all duration-300 active:scale-95" onclick="changeHero(this)">
+<img class="w-full h-full object-cover" data-alt="Editorial photograph of the midnight blue silk gown seen from the side, highlighting its architectural silhouette and the way the fabric falls gracefully against a soft beige backdrop. The mood is serene and exclusive, typical of a high-end luxury atelier boutique." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBHD0QnBcft8Kff7KPTtNJ8CmiQEv0EyZxEgxhMSdAJDaN0WHik4KWtp5RSD5XN_qNGCXgkhoxzrNUVHpbHStg5ySQoI0_TAc3ADapNf4DTwUMM1GEoPRRcCsQffT3yF5RxQ4VcdrNy7JwE_ZP3D627sBh-Ef-UjPRm_o6lD4E4ZKErB_Kc-rfAocv_xhHfSGLPiK8yMNAN7eVBy_Nkw4mzKhCRb1_ndpg0fxb8ROgp4gaZEvXO6IOzk952BPmPzbi_cbtDb6tLdblo"/>
+</button>
+<button class="flex-shrink-0 w-24 aspect-[3/4] border border-transparent hover:border-outline-variant overflow-hidden transition-all duration-300 active:scale-95" onclick="changeHero(this)">
+<img class="w-full h-full object-cover" data-alt="Rear view of the luxury silk gown showing an elegant low-cut back and the beginning of the dramatic train. The lighting creates a soft glow on the silk, emphasizing its premium texture and dark navy hue against a bright, airy gallery background." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBUL7cRj-vG7yNk3ow-idrLvz0qb52AOkS57B_gZrZEnMI7YzjF5gDws0Xh6hc5p9yP6ZhpJkZMZVnB2ceooDQGdE0mJbfT7iOztkkrOd03_CI_wDJ7iAL4K16zhC3UIQBj779TfYTZviSYUv2tEIet3npx2wv2jvpeLXJ4BizU_0m8HUMp96UjBneG4MLjA5uY2h4IXVCPeVkWCXuH7U_a70RYg2ze2acJmDZXGVOz2OWqR_xqc8dVNwUI2tLp4spFILrEj9cZhA46"/>
+</button>
+<button class="flex-shrink-0 w-24 aspect-[3/4] border border-transparent hover:border-outline-variant overflow-hidden transition-all duration-300 active:scale-95" onclick="changeHero(this)">
+<img class="w-full h-full object-cover" data-alt="Extreme macro shot of the midnight blue silk fabric under warm light, revealing the fine weave and the luxurious weight of the material. The focus is sharp on the texture, creating a tactile sense of luxury and quiet elegance." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDn-dc-2UOPeOttIY49MRZz45NdqsEWrKHXrfza9slhjhE6MZPWIavTaHyegCKjtXsTl2YzuS3W4hrxTrxZm-eP4yYR2plpifxei4h8TdaOnodssChoiR4jkzQNKF3Z7mC1hl79EhkhY4QRMusPasaOW21kjRfCDOLPXg6Cr1KJWWjV3poH9Vm09EaGvh4Z3zg9bc4UMsMNxf6BnrZT5e3vmgupi-YqYtrUG-W0PRAJXnWOqio6e1qHT3JRJLhW2XdEYlY5tm248G6c"/>
+</button>
+</div>
+</section>
+<!-- Column 3: Shop Panel -->
+<aside class="md:col-span-4 flex flex-col pt-12">
+<div class="sticky top-32">
+<div class="mb-12">
+<p class="font-eyebrow-uppercase text-eyebrow-uppercase uppercase tracking-widest text-on-surface-variant mb-2">Atelier Signature</p>
+<h1 class="font-display-lg text-headline-md md:text-display-lg mb-4">Luna Silk Gown</h1>
+<p class="font-body-lg text-body-lg text-primary">$850</p>
+</div>
+<!-- Size Selector -->
+<div class="mb-10">
+<p class="font-label-sm text-label-sm mb-4 uppercase tracking-tighter">Select Size</p>
+<div class="flex flex-wrap gap-3">
+<button class="px-6 py-2 rounded-full border border-outline-variant hover:border-primary transition-colors text-label-sm">FR 34</button>
+<button class="px-6 py-2 rounded-full border border-primary bg-primary text-on-primary transition-colors text-label-sm">FR 36</button>
+<button class="px-6 py-2 rounded-full border border-outline-variant hover:border-primary transition-colors text-label-sm">FR 38</button>
+<button class="px-6 py-2 rounded-full border border-outline-variant hover:border-primary transition-colors text-label-sm">FR 40</button>
+</div>
+</div>
+<!-- Action Buttons -->
+<div class="flex flex-col gap-4 mb-12">
+<button class="w-full bg-primary text-on-primary py-4 rounded-full font-label-sm text-label-sm uppercase tracking-widest hover:opacity-80 transition-opacity active:scale-[0.98]">
+                            Add to bag
+                        </button>
+<button class="w-full border border-primary text-primary py-4 rounded-full font-label-sm text-label-sm uppercase tracking-widest hover:bg-surface-container-low transition-colors flex items-center justify-center gap-2 active:scale-[0.98]">
+<span class="material-symbols-outlined text-sm">view_in_ar</span>
+                            Try this look
+                        </button>
+</div>
+<!-- Details Accordion -->
+<div class="editorial-rule mb-6"></div>
+<div class="space-y-6">
+<details class="group cursor-pointer">
+<summary class="flex justify-between items-center list-none font-label-sm text-label-sm uppercase tracking-wider">
+                                Product Details
+                                <span class="material-symbols-outlined transition-transform group-open:rotate-180">expand_more</span>
+</summary>
+<div class="pt-4 text-on-surface-variant font-body-md text-sm leading-relaxed">
+                                Expertly tailored from 100% heavyweight mulberry silk. Featuring a hidden side zipper, silk-covered buttons, and internal corset structure for a flawless fit.
+                            </div>
+</details>
+<div class="editorial-rule"></div>
+<details class="group cursor-pointer">
+<summary class="flex justify-between items-center list-none font-label-sm text-label-sm uppercase tracking-wider">
+                                Shipping &amp; Returns
+                                <span class="material-symbols-outlined transition-transform group-open:rotate-180">expand_more</span>
+</summary>
+<div class="pt-4 text-on-surface-variant font-body-md text-sm leading-relaxed">
+                                Complimentary express shipping on all orders. Returns accepted within 14 days of delivery. Custom bespoke adjustments available on request.
+                            </div>
+</details>
+</div>
+</div>
+</aside>
+</div>
+</main>
+<!-- Footer -->
+<footer class="bg-surface-container-low dark:bg-inverse-surface border-t border-outline-variant dark:border-on-surface-variant mt-24">
+<div class="grid grid-cols-1 md:grid-cols-4 gap-gutter px-margin-desktop py-16 max-w-container-max mx-auto">
+<div class="col-span-1 md:col-span-1">
+<span class="font-headline-md text-headline-md text-primary dark:text-on-background uppercase tracking-widest block mb-6">Atelier</span>
+<p class="text-on-surface-variant font-label-sm text-label-sm mb-6">Dedicated to the art of the fit. Discover high-end minimalism through AI-enhanced bespoke tailoring.</p>
+</div>
+<div class="flex flex-col gap-4">
+<span class="font-eyebrow-uppercase text-eyebrow-uppercase uppercase mb-2">Company</span>
+<a class="text-on-surface-variant hover:text-primary dark:hover:text-on-background transition-colors font-body-md text-body-md" href="#">Collections</a>
+<a class="text-on-surface-variant hover:text-primary dark:hover:text-on-background transition-colors font-body-md text-body-md" href="#">Sustainability</a>
+<a class="text-on-surface-variant hover:text-primary dark:hover:text-on-background transition-colors font-body-md text-body-md" href="#">Careers</a>
+</div>
+<div class="flex flex-col gap-4">
+<span class="font-eyebrow-uppercase text-eyebrow-uppercase uppercase mb-2">Support</span>
+<a class="text-on-surface-variant hover:text-primary dark:hover:text-on-background transition-colors font-body-md text-body-md" href="#">Contact</a>
+<a class="text-on-surface-variant hover:text-primary dark:hover:text-on-background transition-colors font-body-md text-body-md" href="#">Atelier Membership</a>
+<a class="text-on-surface-variant hover:text-primary dark:hover:text-on-background transition-colors font-body-md text-body-md" href="#">Terms of Service</a>
+</div>
+<div class="flex flex-col gap-4">
+<span class="font-eyebrow-uppercase text-eyebrow-uppercase uppercase mb-2">Connect</span>
+<a class="text-on-surface-variant hover:text-primary dark:hover:text-on-background transition-colors font-body-md text-body-md" href="#">Instagram</a>
+<a class="text-on-surface-variant hover:text-primary dark:hover:text-on-background transition-colors font-body-md text-body-md" href="#">Journal</a>
+<p class="mt-4 font-label-sm text-label-sm text-on-surface-variant">© 2024 Atelier. All rights reserved.</p>
+</div>
+</div>
+</footer>
+<!-- Scripts for Interaction -->
+<script>
+        function changeHero(element) {
+            const hero = document.getElementById('hero-image');
+            const newSrc = element.querySelector('img').getAttribute('src');
+            const newAlt = element.querySelector('img').getAttribute('data-alt');
+            
+            // Remove border from all buttons
+            document.querySelectorAll('button.aspect-\\[3\\/4\\]').forEach(btn => {
+                btn.classList.remove('border-primary');
+                btn.classList.add('border-transparent');
+            });
+            
+            // Add border to active button
+            element.classList.remove('border-transparent');
+            element.classList.add('border-primary');
+
+            // Apply crossfade
+            hero.style.opacity = '0';
+            setTimeout(() => {
+                hero.setAttribute('src', newSrc);
+                hero.setAttribute('data-alt', newAlt);
+                hero.style.opacity = '1';
+            }, 300);
+        }
+
+        // Initialize with first image active
+        window.onload = () => {
+            const firstBtn = document.querySelector('button.aspect-\\[3\\/4\\]');
+            if (firstBtn) {
+                const firstImg = firstBtn.querySelector('img');
+                const hero = document.getElementById('hero-image');
+                hero.setAttribute('src', firstImg.getAttribute('src'));
+                hero.setAttribute('data-alt', firstImg.getAttribute('data-alt'));
+            }
+        };
+    </script>
+</body></html>

@@ -1,0 +1,7 @@
+[environments.default]
+store = "tryitout-dev.myshopify.com"
+theme = "189132800281"
+
+[environments.host]
+store = "tryitout-dev.myshopify.com"
+theme = "189132800281"

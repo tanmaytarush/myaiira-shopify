@@ -1,0 +1,34 @@
+{% comment %}
+  Embeds Admin catalog products for VTO search when App Proxy / Remix is unavailable.
+  Metafield custom.vto_sub_type is used when set (storefront-readable).
+{% endcomment %}
+{% paginate collections.all.products by 250 %}
+<script type="application/json" id="aiira-storefront-catalog">
+[
+{%- assign catalog_first = true -%}
+{%- for product in collections.all.products -%}
+  {%- if product.featured_image -%}
+    {%- unless catalog_first -%},{%- endunless -%}
+    {%- assign catalog_first = false -%}
+    {%- assign catalog_sub_type = product.metafields.custom.vto_sub_type.value | default: '' | downcase | strip -%}
+    {%- if catalog_sub_type == blank -%}
+      {%- assign catalog_sub_type = product.type | downcase | strip | replace: ' ', '_' -%}
+    {%- endif -%}
+    {%- if catalog_sub_type == blank -%}
+      {%- assign catalog_sub_type = 'default' -%}
+    {%- endif -%}
+    {
+      "item_image_url": {{ product.featured_image | image_url: width: 800 | json }},
+      "sub_type": {{ catalog_sub_type | json }},
+      "title": {{ product.title | json }},
+      "product_id": {{ product.id | json }},
+      "handle": {{ product.handle | json }},
+      "product_type": {{ product.type | json }},
+      "tags": {{ product.tags | json }},
+      "search_text": {{ product.title | append: ' ' | append: product.handle | append: ' ' | append: product.type | downcase | json }}
+    }
+  {%- endif -%}
+{%- endfor -%}
+]
+</script>
+{% endpaginate %}
