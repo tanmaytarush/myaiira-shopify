@@ -28,19 +28,13 @@ const path = process.env.INDEX;
 const blockType =
   "shopify://apps/tryitout/blocks/aiira-home/019f082c-a6e1-7b66-bcb9-3ee06845e0f0";
 
-const stylingProductUrl = "/products/chick-minimal";
-
 const homeSettings = {
   hero_eyebrow: "Curation 01",
   heading: "Seasonal Poetry:",
   heading_em: "The Modern Heritage",
   tagline: "Defining the future of luxury fitting.",
   trends_heading: "Top Trends",
-  cta_label: "Click to begin styling",
-  cta_link: stylingProductUrl,
-  look_1_link: stylingProductUrl,
-  look_2_link: stylingProductUrl,
-  look_3_link: stylingProductUrl,
+  cta_label: "Start Virtual Try-On",
   consult_label: "Book Consultation",
   bespoke_eyebrow: "The Atelier Experience",
 };
@@ -90,16 +84,11 @@ appsSection.blocks[blockKey] = {
 appsSection.block_order = [blockKey];
 appsSection.settings = { include_margins: false };
 
-const heroKey = Object.keys(data.sections).find(
-  (key) => data.sections[key].type === "image-banner",
-);
-if (heroKey) {
-  data.sections[heroKey].disabled = true;
-}
-
-for (const key of ["featured_collection", "f1552b18-6017-4231-810d-74e61da22c37", "38cdf60f-e431-43b5-aac3-7e6215447d67"]) {
-  if (data.sections[key]) {
-    data.sections[key].disabled = true;
+// Disable all non-apps sections so only Atelier Home shows
+for (const key of Object.keys(data.sections)) {
+  const section = data.sections[key];
+  if (key !== appsKey && section.type !== "apps") {
+    section.disabled = true;
   }
 }
 

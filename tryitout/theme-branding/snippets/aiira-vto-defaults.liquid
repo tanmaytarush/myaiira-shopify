@@ -1,0 +1,18 @@
+{% comment %}
+  Fallback VTO payload when homepage block is stale — theme can always open the modal.
+{% endcomment %}
+{%- assign vto_product = all_products['chick-minimal'] -%}
+{%- assign hero_url = 'https://lh3.googleusercontent.com/aida-public/AB6AXuA1_52VP7v5-Cux-x8pnj7tKal7gsg29UNkz0y9UJ1Zm-S9Lqzny1IDQRIlf622Tb0SOXBokbBctXffLkYsmLiTRYE5i-OMWn6xM8gqeMtQD8dHql6MmKCW8YrQGY1URzEVBenzSY6ekHBtpd3bgVd-O7RKIGNAJ_5Wvycm53SzrG6nLQRVRgVQkKu7NMngn1rzgUMttDtXkSJiFmuS2xIVJ9knhJemCwjqjbt1H5XuNICbolDk401hD945eu4QaRqX2dvzbviO7g4Z' -%}
+{%- assign acc1_url = 'https://lh3.googleusercontent.com/aida-public/AB6AXuBZ7QNPUxRy0IrKfAKIm_ig1WPKUNJDWwEVl_DfnxNxdbjM1YAktjkSbaig4yympiMSWOoRvMb7pZlvgor6hyFMTkQP23-GYE9wHmlWR9rDxnbKur3NL2XwDVsS2N6qHM6RtALimOKx6qDSkcoCddbkv5dBLXe_ZfxpQ8zwS1f1TyfFelAzeymsJdQ_k0Adjak2anG1Cb5ZryUOCT5VdESvCU6KjVdj3RS7FI3zsvIv8A8iSpz8Pd7mykDc7zCKZIl3yLBR_M6ytDJT' -%}
+{%- assign acc2_url = 'https://lh3.googleusercontent.com/aida-public/AB6AXuBV1ExvyVab1OD9wM-2pVoUc26CChsWsdzBMXsLb2rsSzm60ArdRcZIAkgbglBQdF1SF00bV6j1sfG29GBiNTpTOeIV6ekfMXq0qZ0CvEAhowhZFKKM3v4h5ZZiBL-k6WqBbpDMKZdHmJVvrKTSUO-b74Xfsm084mHeNoTXQZglk1lWExUexOl0tZ5OZ3_QZvlFhMPzBcKENnZZZei5VIu5siKBOJy5Ed4yxGfMEZz_enEnyiF8giq5Z72P0gKneXSgTR8-sJtxrLwb' -%}
+<div
+  id="aiira-vto-defaults"
+  hidden
+  data-product-id="{{ vto_product.id | default: '' }}"
+  data-product-title="The Midnight Saree"
+  data-product-image="{{ hero_url }}"
+  data-product-price="{{ vto_product.selected_or_first_available_variant.price | default: 0 }}"
+  data-product-currency="{{ cart.currency.iso_code }}"
+  data-product-vendor="{{ vto_product.vendor | default: shop.name | escape }}"
+  data-outfit-items='[]'
+></div>

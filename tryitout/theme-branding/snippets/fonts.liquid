@@ -1,0 +1,50 @@
+{% # theme-check-disable %}
+{%- unless settings.type_body_font.system? -%}
+  {%- if settings.type_body_font != blank -%}
+    <link
+      rel="preload"
+      as="font"
+      href="{{ settings.type_body_font | font_url }}"
+      type="font/woff2"
+      crossorigin
+      fetchpriority="low"
+    >
+  {%- endif -%}
+{%- endunless -%}
+{%- unless settings.type_subheading_font.system? -%}
+  {%- if settings.type_subheading_font != blank -%}
+    <link
+      rel="preload"
+      as="font"
+      href="{{ settings.type_subheading_font | font_url }}"
+      type="font/woff2"
+      crossorigin
+      fetchpriority="low"
+    >
+  {%- endif -%}
+{%- endunless -%}
+{%- unless settings.type_heading_font.system? -%}
+  {%- if settings.type_heading_font != blank -%}
+    <link
+      rel="preload"
+      as="font"
+      href="{{ settings.type_heading_font | font_url }}"
+      type="font/woff2"
+      crossorigin
+      fetchpriority="low"
+    >
+  {%- endif -%}
+{%- endunless -%}
+{%- unless settings.type_accent_font.system? -%}
+  {%- if settings.type_accent_font != blank -%}
+    <link
+      rel="preload"
+      as="font"
+      href="{{ settings.type_accent_font | font_url }}"
+      type="font/woff2"
+      crossorigin
+      fetchpriority="low"
+    >
+  {%- endif -%}
+{%- endunless -%}
+{% # theme-check-enable %}

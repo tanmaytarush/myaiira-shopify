@@ -62,6 +62,6 @@ redirect_urls = [
 ]
 
 [app_proxy]
-url = "https://ai.talentool.in/apps/myaiira"
+url = "https://ai.talentool.in/webhook"
 subpath = "myaiira"
 prefix = "apps"

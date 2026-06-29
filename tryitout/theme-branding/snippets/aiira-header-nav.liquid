@@ -1,0 +1,34 @@
+{% comment %}
+  Atelier main nav — Home + Virtual Try-On on homepage (design/atelier stitch flow).
+{% endcomment %}
+{%- liquid
+  assign vto_url = routes.root_url | append: '#try-on'
+  assign home_active = false
+
+  if template.name == 'index'
+    assign home_active = true
+  endif
+-%}
+
+<nav class="aiira-header-nav" aria-label="Main">
+  <ul class="aiira-header-nav__list list-unstyled" role="list">
+    <li class="aiira-header-nav__item">
+      <a
+        href="{{ routes.root_url }}"
+        class="aiira-header-nav__link{% if home_active %} aiira-header-nav__link--active{% endif %}"
+        {% if home_active %}aria-current="page"{% endif %}
+      >
+        Home
+      </a>
+    </li>
+    <li class="aiira-header-nav__item">
+      <a
+        href="{{ vto_url }}"
+        class="aiira-header-nav__link"
+        data-aiira-nav-vto
+      >
+        Atelier AI
+      </a>
+    </li>
+  </ul>
+</nav>

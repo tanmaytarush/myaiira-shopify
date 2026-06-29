@@ -1,3 +1,4 @@
+{%- render 'aiira-fonts' -%}
 {%- comment -%} Atelier design reference images — preserved when theme settings are empty {%- endcomment -%}
 {%- assign design_looks = "
   midnight_saree|Gilded Heritage|Satin Ascent|The Midnight Saree|Hand-woven charcoal silk with champagne accents.|https://lh3.googleusercontent.com/aida-public/AB6AXuA1_52VP7v5-Cux-x8pnj7tKal7gsg29UNkz0y9UJ1Zm-S9Lqzny1IDQRIlf622Tb0SOXBokbBctXffLkYsmLiTRYE5i-OMWn6xM8gqeMtQD8dHql6MmKCW8YrQGY1URzEVBenzSY6ekHBtpd3bgVd-O7RKIGNAJ_5Wvycm53SzrG6nLQRVRgVQkKu7NMngn1rzgUMttDtXkSJiFmuS2xIVJ9knhJemCwjqjbt1H5XuNICbolDk401hD945eu4QaRqX2dvzbviO7g4Z|https://lh3.googleusercontent.com/aida-public/AB6AXuBZ7QNPUxRy0IrKfAKIm_ig1WPKUNJDWwEVl_DfnxNxdbjM1YAktjkSbaig4yympiMSWOoRvMb7pZlvgor6hyFMTkQP23-GYE9wHmlWR9rDxnbKur3NL2XwDVsS2N6qHM6RtALimOKx6qDSkcoCddbkv5dBLXe_ZfxpQ8zwS1f1TyfFelAzeymsJdQ_k0Adjak2anG1Cb5ZryUOCT5VdESvCU6KjVdj3RS7FI3zsvIv8A8iSpz8Pd7mykDc7zCKZIl3yLBR_M6ytDJT|https://lh3.googleusercontent.com/aida-public/AB6AXuBV1ExvyVab1OD9wM-2pVoUc26CChsWsdzBMXsLb2rsSzm60ArdRcZIAkgbglBQdF1SF00bV6j1sfG29GBiNTpTOeIV6ekfMXq0qZ0CvEAhowhZFKKM3v4h5ZZiBL-k6WqBbpDMKZdHmJVvrKTSUO-b74Xfsm084mHeNoTXQZglk1lWExUexOl0tZ5OZ3_QZvlFhMPzBcKENnZZZei5VIu5siKBOJy5Ed4yxGfMEZz_enEnyiF8giq5Z72P0gKneXSgTR8-sJtxrLwb
@@ -8,42 +9,37 @@
 
 {%- assign design_bespoke_img = "https://lh3.googleusercontent.com/aida-public/AB6AXuAURFCeQqumXXlfBJr4s291yPeYaXzVbHHdiwcybpBlEo5QH5nm7ezdDo83twyIMkEkqWBbzvYfL1fp9oQr2cImFXRKmQlRhMJ8mc9952Yg8uVBEY8h9bE64xKHH43oTJPVja8DwuumYEwNbFpWoSZ-sfBMQXPGjskcZJOJvXBh3Mssl4kcs5G0YFDw-WWc7dzUJpJuFwfCe46p5huh4X9QcO_-BfDpi8mYKWFDnLA80llquqNXTHwAy1pqGNzjh8hJLbhCJitRbYl6" -%}
 
-{%- if block.settings.styling_product != blank -%}
-  {%- assign default_entry_url = block.settings.styling_product.url -%}
-{%- else -%}
-  {%- assign default_entry_url = routes.collections_url | append: '/all' -%}
+{%- assign look_slot_profiles = "saree,earrings,necklace|lehenga,bracelet,footwear|dress,handbag,footwear" | split: "|" -%}
+
+{%- assign vto_product = block.settings.styling_product -%}
+{%- if vto_product == blank -%}
+  {%- assign vto_product = all_products["chick-minimal"] -%}
 {%- endif -%}
 
-{%- if block.settings.cta_link != blank -%}
-  {%- assign styling_cta_url = block.settings.cta_link -%}
-{%- elsif block.settings.styling_product != blank -%}
-  {%- assign styling_cta_url = block.settings.styling_product.url -%}
-{%- else -%}
-  {%- assign styling_cta_url = default_entry_url -%}
-{%- endif -%}
+{%- assign vto_product_id = vto_product.id | default: "home-vto" -%}
+{%- assign vto_product_title = vto_product.title | default: "Atelier Look" -%}
+{%- assign vto_product_image = vto_product.featured_image | image_url: width: 800 | default: "" -%}
+{%- assign vto_product_price = vto_product.selected_or_first_available_variant.price | default: 0 -%}
+{%- assign vto_product_vendor = vto_product.vendor | default: shop.name -%}
 
-{%- if block.settings.consult_link != blank -%}
-  {%- assign consult_cta_url = block.settings.consult_link -%}
-{%- else -%}
-  {%- assign consult_cta_url = default_entry_url -%}
-{%- endif -%}
-
-<section class="aiira-section aiira-landing" {{ block.shopify_attributes }}>
+<section class="aiira-section aiira-landing" {{ block.shopify_attributes }} id="aiira-home">
   <div class="aiira-landing__hero">
     <div>
       <p class="aiira-eyebrow">{{ block.settings.hero_eyebrow | default: "Curation 01" }}</p>
-      <h1 class="aiira-heading">{{ block.settings.heading | default: "Seasonal Poetry:" }}<br/><em>{{ block.settings.heading_em | default: "The Modern Heritage" }}</em></h1>
+      <h1 class="aiira-heading">{{ block.settings.heading | default: "Seasonal Poetry:" }}<br/>{{ block.settings.heading_em | default: "The Modern Heritage" }}</h1>
     </div>
     <div class="aiira-landing__brand-row">
-      <span class="aiira-landing__logo-text">Atelier</span>
+      {%- if shop.logo != blank -%}
+        <img class="aiira-landing__logo-img" src="{{ shop.logo | image_url: width: 64 }}" alt="{{ shop.name | escape }}" width="64" height="64" />
+      {%- endif -%}
       <p class="aiira-landing__tagline">{{ block.settings.tagline | default: "Defining the future of luxury fitting." }}</p>
     </div>
   </div>
 
-  <div class="aiira-trends">
+  <div class="aiira-trends" id="aiira-trends">
     <div class="aiira-trends__header">
       <h2 class="aiira-heading aiira-heading--md">{{ block.settings.trends_heading | default: "Top Trends" }}</h2>
-      <div class="aiira-trends__nav" aria-hidden="true">
+      <div class="aiira-trends__nav">
         <button type="button" class="aiira-trends__nav-btn" data-aiira-carousel-prev aria-label="Previous look">
           <span class="material-symbols-outlined">chevron_left</span>
         </button>
@@ -53,7 +49,8 @@
       </div>
     </div>
 
-    <div class="aiira-trends__track" data-aiira-trends-track>
+    <div class="aiira-trends__viewport" data-aiira-trends-viewport>
+      <div class="aiira-trends__marquee" data-aiira-trends-marquee>
       {% for i in (1..3) %}
         {% assign idx = forloop.index0 %}
         {% assign design_row = design_looks[idx] | strip | split: "|" %}
@@ -64,21 +61,52 @@
         {% assign acc2_key = 'look_' | append: i | append: '_acc2' %}
         {% assign acc1_label_key = 'look_' | append: i | append: '_acc1_label' %}
         {% assign acc2_label_key = 'look_' | append: i | append: '_acc2_label' %}
-        {% assign link_key = 'look_' | append: i | append: '_link' %}
 
         {% assign look_title = block.settings[title_key] | default: design_row[3] %}
         {% assign look_subtitle = block.settings[subtitle_key] | default: design_row[4] %}
         {% assign acc1_label = block.settings[acc1_label_key] | default: design_row[1] %}
         {% assign acc2_label = block.settings[acc2_label_key] | default: design_row[2] %}
-        {% if block.settings[link_key] != blank %}
-          {% assign look_link = block.settings[link_key] %}
-        {% else %}
-          {% assign look_link = styling_cta_url %}
-        {% endif %}
-
         {% assign hero_img = block.settings[hero_key] %}
         {% assign acc1_img = block.settings[acc1_key] %}
         {% assign acc2_img = block.settings[acc2_key] %}
+
+        {% if hero_img != blank %}
+          {% assign hero_url = hero_img | image_url: width: 900 %}
+        {% else %}
+          {% assign hero_url = design_row[7] %}
+        {% endif %}
+        {% if acc1_img != blank %}
+          {% assign acc1_url = acc1_img | image_url: width: 240 %}
+        {% else %}
+          {% assign acc1_url = design_row[5] %}
+        {% endif %}
+        {% if acc2_img != blank %}
+          {% assign acc2_url = acc2_img | image_url: width: 240 %}
+        {% else %}
+          {% assign acc2_url = design_row[6] %}
+        {% endif %}
+
+        {% assign slot_row = look_slot_profiles[idx] | split: "," %}
+        {% capture look_outfit_json %}
+          {% render "aiira-home-look-outfit-json",
+            hero_url: hero_url,
+            acc1_url: acc1_url,
+            acc2_url: acc2_url,
+            look_title: look_title,
+            acc1_label: acc1_label,
+            acc2_label: acc2_label,
+            slot_garment: slot_row[0],
+            slot_acc1: slot_row[1],
+            slot_acc2: slot_row[2]
+          %}
+        {% endcapture %}
+        {% assign look_outfit_json = look_outfit_json | strip %}
+
+        {% if forloop.first %}
+          {% assign default_look_outfit_json = look_outfit_json %}
+          {% assign default_look_title = look_title %}
+          {% assign default_look_hero_url = hero_url %}
+        {% endif %}
 
         <article class="aiira-look-card">
           <div class="aiira-look-card__grid">
@@ -117,16 +145,31 @@
                   <h3 class="aiira-look-card__overlay-title">{{ look_title }}</h3>
                   <p class="aiira-look-card__overlay-desc">{{ look_subtitle }}</p>
                 </div>
-                <a href="{{ look_link }}" class="aiira-btn">View Look</a>
+                <button
+                  type="button"
+                  class="aiira-btn"
+                  data-aiira-open-vto
+                  {% if forloop.first %}data-aiira-vto-default{% endif %}
+                  data-product-id="{{ vto_product_id }}"
+                  data-product-title="{{ look_title | escape }}"
+                  data-product-image="{{ hero_url }}"
+                  data-product-price="{{ vto_product_price }}"
+                  data-product-currency="{{ cart.currency.iso_code }}"
+                  data-product-vendor="{{ vto_product_vendor | escape }}"
+                  data-outfit-items='[]'
+                >
+                  Try this look
+                </button>
               </div>
             </div>
           </div>
         </article>
       {% endfor %}
+      </div>
     </div>
   </div>
 
-  <section class="aiira-bespoke">
+  <section class="aiira-bespoke" id="aiira-bespoke">
     <div class="aiira-bespoke__grid">
       <div class="aiira-bespoke__visual">
         {% if block.settings.bespoke_image != blank %}
@@ -157,17 +200,70 @@
         <h2 class="aiira-heading">Your Private<br/>Fitting Room</h2>
         <p class="aiira-body aiira-body--lg">{{ block.settings.bespoke_body | default: "Experience the fusion of high-fashion authority and AI-driven precision. Each garment is curated, fitted, and perfected for your specific silhouette." }}</p>
         <div class="aiira-bespoke__actions">
-          <a href="{{ styling_cta_url }}" class="aiira-btn">
-            {{ block.settings.cta_label | default: "Click to begin styling" }}
-          </a>
-          <a href="{{ consult_cta_url }}" class="aiira-btn aiira-btn--outline">
+          <button
+            type="button"
+            class="aiira-btn"
+            data-aiira-open-vto
+            data-product-id="{{ vto_product_id }}"
+            data-product-title="{{ default_look_title | default: vto_product_title | escape }}"
+            data-product-image="{{ default_look_hero_url | default: vto_product_image }}"
+            data-product-price="{{ vto_product_price }}"
+            data-product-currency="{{ cart.currency.iso_code }}"
+            data-product-vendor="{{ vto_product_vendor | escape }}"
+            data-outfit-items='[]'
+          >
+            {{ block.settings.cta_label | default: "Start Virtual Try-On" }}
+          </button>
+          <button type="button" class="aiira-btn aiira-btn--outline" data-aiira-scroll-target="#aiira-bespoke">
             {{ block.settings.consult_label | default: "Book Consultation" }}
-          </a>
+          </button>
         </div>
       </div>
     </div>
   </section>
+
+  <footer class="aiira-footer">
+    <div class="aiira-footer__grid">
+      <div class="aiira-footer__brand">
+        <a class="aiira-footer__brand-name" href="{{ routes.root_url }}">Atelier</a>
+        <p class="aiira-footer__brand-desc">Redefining luxury through the lens of modern heritage and artificial intelligence.</p>
+        <div class="aiira-footer__social">
+          <a class="aiira-footer__social-btn" href="#" aria-label="Share">
+            <span class="material-symbols-outlined">share</span>
+          </a>
+          <a class="aiira-footer__social-btn" href="mailto:" aria-label="Email">
+            <span class="material-symbols-outlined">mail</span>
+          </a>
+        </div>
+      </div>
+      <div class="aiira-footer__nav-col">
+        <p class="aiira-footer__nav-heading">Experience</p>
+        <ul class="aiira-footer__nav-list">
+          <li><a href="{{ routes.root_url }}">Home</a></li>
+          <li><a href="{{ routes.root_url }}#try-on">Virtual Try-On</a></li>
+        </ul>
+      </div>
+      <div class="aiira-footer__signup">
+        <p class="aiira-footer__nav-heading">Join the Atelier</p>
+        <p class="aiira-footer__signup-desc">Be the first to know about new collections and private exhibitions.</p>
+        {%- form 'customer', id: 'atelier-footer-form', class: 'aiira-footer__signup-form' -%}
+          <input type="hidden" name="contact[tags]" value="newsletter" />
+          <input class="aiira-footer__signup-input" type="email" name="contact[email]" placeholder="Email Address" autocomplete="email" required />
+          <button class="aiira-footer__signup-btn" type="submit" aria-label="Subscribe">
+            <span class="material-symbols-outlined">arrow_forward</span>
+          </button>
+        {%- endform -%}
+      </div>
+    </div>
+    <div class="aiira-footer__bottom">
+      <p>© 2024 Atelier. All rights reserved.</p>
+      <p>Designed for the Discriminating.</p>
+    </div>
+  </footer>
 </section>
+
+{% render 'aiira-storefront-catalog' %}
+{% render 'aiira-vto-loader' %}
 
 {% schema %}
 {
@@ -193,7 +289,7 @@
     {
       "type": "text",
       "id": "heading_em",
-      "label": "Hero heading (italic line)",
+      "label": "Hero heading (second line)",
       "default": "The Modern Heritage"
     },
     {
@@ -216,7 +312,7 @@
       "type": "product",
       "id": "styling_product",
       "label": "Primary styling product",
-      "info": "“Click to begin styling” opens this product’s Atelier page. Recommended: chick-minimal."
+      "info": "Shopify product used for VTO job API (product_id). Recommended: chick-minimal."
     },
     {
       "type": "header",
@@ -344,7 +440,7 @@
       "type": "text",
       "id": "cta_label",
       "label": "Primary CTA",
-      "default": "Click to begin styling"
+      "default": "Start Virtual Try-On"
     },
     {
       "type": "url",

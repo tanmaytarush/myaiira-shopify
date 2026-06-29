@@ -1,13 +1,6 @@
-<script data-aiira-vto-loader>
-  (function () {
-    if (window.__AIIRA_VTO_LOADING__ || window.__AIIRA_VTO__) return;
-    window.__AIIRA_VTO_LOADING__ = true;
-    var s = document.createElement("script");
-    s.src = {{ 'vto-widget.js' | asset_url | json }};
-    s.defer = true;
-    s.onload = function () {
-      window.__AIIRA_VTO_LOADING__ = false;
-    };
-    document.head.appendChild(s);
-  })();
+<script>
+  window.__AIIRA_VTO_WEBHOOK_URL__ = window.__AIIRA_VTO_WEBHOOK_URL__ || "https://ai.talentool.in/webhook/virtual-tryon";
+  window.__AIIRA_VTO_UPLOAD_WEBHOOK_URL__ = window.__AIIRA_VTO_UPLOAD_WEBHOOK_URL__ || "https://ai.talentool.in/webhook/vto-user-upload";
 </script>
+<script src="{{ 'vto-widget.js' | asset_url }}" defer="defer"></script>
+<script src="{{ 'aiira-home.js' | asset_url }}" defer="defer"></script>

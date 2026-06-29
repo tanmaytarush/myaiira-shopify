@@ -1,0 +1,103 @@
+{% comment %}
+  Theme-hosted VTO bootstrap — works even when the app block is cached/stale.
+{% endcomment %}
+{% render 'aiira-vto-defaults' %}
+{% render 'aiira-storefront-catalog' %}
+<script>
+  window.__AIIRA_VTO_WEBHOOK_URL__ = "https://ai.talentool.in/webhook/virtual-tryon";
+  window.__AIIRA_VTO_UPLOAD_WEBHOOK_URL__ = "https://ai.talentool.in/webhook/vto-user-upload";
+</script>
+{{ 'aiira-vto.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'aiira-vto-widget.js' | asset_url }}" defer="defer"></script>
+<script>
+  (function () {
+    function qs(sel) {
+      return document.querySelector(sel);
+    }
+
+    function openFromDefaults() {
+      var el = qs("#aiira-vto-defaults");
+      if (!el || !window.__AIIRA_VTO__ || typeof window.__AIIRA_VTO__.open !== "function") {
+        return false;
+      }
+      window.__AIIRA_VTO__.open({
+        id: el.getAttribute("data-product-id"),
+        title: el.getAttribute("data-product-title"),
+        image: el.getAttribute("data-product-image"),
+        price: el.getAttribute("data-product-price"),
+        currency: el.getAttribute("data-product-currency"),
+        vendor: el.getAttribute("data-product-vendor"),
+        itemsRaw: el.getAttribute("data-outfit-items"),
+      });
+      return true;
+    }
+
+    function tryOpen() {
+      var btn =
+        qs("[data-aiira-vto-default]") ||
+        qs(".aiira-look-card:not(.aiira-look-card--clone) [data-aiira-open-vto]") ||
+        qs("[data-aiira-open-vto]");
+      if (btn) {
+        btn.click();
+        return true;
+      }
+      if (window.__AIIRA_VTO__ && typeof window.__AIIRA_VTO__.openFromElement === "function") {
+        var fallback = qs("[data-aiira-open-vto]");
+        if (fallback) {
+          window.__AIIRA_VTO__.openFromElement(fallback);
+          return true;
+        }
+      }
+      return openFromDefaults();
+    }
+
+    function onTryOnEntry() {
+      if (window.location.hash !== "#try-on") return;
+      if (tryOpen()) return;
+      var attempts = 0;
+      var timer = window.setInterval(function () {
+        attempts += 1;
+        if (tryOpen() || attempts >= 60) window.clearInterval(timer);
+      }, 150);
+    }
+
+    function interceptLegacyLinks() {
+      document.addEventListener(
+        "click",
+        function (e) {
+          var link = e.target.closest(
+            ".aiira-landing a.aiira-btn, .aiira-bespoke a.aiira-btn, .aiira-look-card a.aiira-btn",
+          );
+          if (!link) return;
+          if (link.hasAttribute("data-aiira-open-vto")) return;
+          var href = link.getAttribute("href") || "";
+          if (
+            href.indexOf("/products/") === -1 &&
+            href.indexOf("/collections/") === -1 &&
+            href.indexOf("#try-on") === -1
+          ) {
+            return;
+          }
+          e.preventDefault();
+          if (window.history && window.history.replaceState) {
+            window.history.replaceState(null, "", window.location.pathname + "#try-on");
+          }
+          if (!tryOpen()) onTryOnEntry();
+        },
+        true,
+      );
+    }
+
+    function boot() {
+      interceptLegacyLinks();
+      onTryOnEntry();
+      window.addEventListener("hashchange", onTryOnEntry);
+    }
+
+    if (document.readyState === "loading") {
+      document.addEventListener("DOMContentLoaded", boot);
+    } else {
+      boot();
+    }
+  })();
+</script>

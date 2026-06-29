@@ -45,7 +45,7 @@ npm run setup:collection-ui   # /collections/all styling
 npm run setup:product-page    # product PDP (e.g. chick-minimal)
 ```
 
-**Intended shopper path:** Home → **Click to begin styling** → Atelier product page → **Try this look** → VTO modal.
+**Intended shopper path:** Home → **Start Virtual Try-On** → Atelier product page → **Try this look** → VTO modal.
 
 Set **Primary styling product** in the Atelier Home block to `chick-minimal` so the CTA skips the default Dawn catalog.
 

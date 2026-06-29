@@ -1,8 +1,20 @@
+{%- render 'aiira-fonts' -%}
 <section class="aiira-look-pdp" {{ block.shopify_attributes }}>
   <div class="aiira-look-pdp__inner">
     <aside class="aiira-look-pdp__intro">
       <h2 class="aiira-heading aiira-heading--italic">Styled for you</h2>
-      <p class="aiira-body">{{ block.settings.description | default: "A masterclass in contemporary silhouettes. This piece combines the heritage of Italian silk with a visionary approach to the modern evening gown." }}</p>
+      <p class="aiira-body">{{ block.settings.description | default: "A masterclass in contemporary silhouettes. This piece combines the heritage of Italian silk with a visionary approach to the modern evening gown. Each fold is a testament to the artisan's touch." }}</p>
+      <hr class="aiira-editorial-rule aiira-look-pdp__intro-rule" />
+      <div class="aiira-look-pdp__links">
+        <button type="button" class="aiira-look-pdp__link-row">
+          <span>Composition</span>
+          <span class="material-symbols-outlined">arrow_forward</span>
+        </button>
+        <button type="button" class="aiira-look-pdp__link-row">
+          <span>Care Guide</span>
+          <span class="material-symbols-outlined">arrow_forward</span>
+        </button>
+      </div>
     </aside>
 
     <section class="aiira-look-pdp__hero">
@@ -46,7 +58,7 @@
 
     <aside class="aiira-look-pdp__shop">
       <div>
-        <p class="aiira-look-pdp__vendor">{{ product.vendor | default: "Atelier" }}</p>
+        <p class="aiira-look-pdp__vendor">{{ block.settings.vendor_eyebrow | default: "Atelier Signature" }}</p>
         <h1 class="aiira-look-pdp__title">{{ product.title }}</h1>
         <p class="aiira-look-pdp__price">
           {{ product.selected_or_first_available_variant.price | money }}
@@ -125,12 +137,27 @@
       {% endif %}
       {% assign alternative_look_collections = block.settings.alternative_look_collections %}
 
-      {% render 'aiira-vto-outfit-data',
-        outfit_products: outfit_products,
-        swap_pool: swap_pool,
-        alternative_look_collections: alternative_look_collections,
-        fallback_product: product
-      %}
+      {% capture aiira_outfit_json %}
+        {% render 'aiira-vto-outfit-data',
+          part: 'items',
+          outfit_products: outfit_products,
+          swap_pool: swap_pool,
+          alternative_look_collections: alternative_look_collections,
+          fallback_product: product
+        %}
+      {% endcapture %}
+      {% assign aiira_outfit_json = aiira_outfit_json | strip %}
+
+      {% capture aiira_outfit_alternatives_json %}
+        {% render 'aiira-vto-outfit-data',
+          part: 'alternatives',
+          outfit_products: outfit_products,
+          swap_pool: swap_pool,
+          alternative_look_collections: alternative_look_collections,
+          fallback_product: product
+        %}
+      {% endcapture %}
+      {% assign aiira_outfit_alternatives_json = aiira_outfit_alternatives_json | strip %}
 
       <button
         type="button"
@@ -198,6 +225,12 @@
       "type": "textarea",
       "id": "description",
       "label": "Styled for you text"
+    },
+    {
+      "type": "text",
+      "id": "vendor_eyebrow",
+      "label": "Shop panel eyebrow",
+      "default": "Atelier Signature"
     },
     {
       "type": "text",

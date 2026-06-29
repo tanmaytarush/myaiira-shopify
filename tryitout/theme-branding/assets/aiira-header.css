@@ -1,0 +1,199 @@
+/**
+ * Atelier header branding — matches design/atelier luxury nav.
+ * Loaded globally via snippets/aiira-header-styles.liquid
+ */
+
+#header-group .header-section,
+#header-group header-component .header__row {
+  background-color: #fbf9f8;
+}
+
+#header-group header-component {
+  --color-background: 251, 249, 248;
+  --color-foreground: 27, 28, 28;
+}
+
+#header-group header-component .header__row {
+  border-bottom: 1px solid rgb(196 199 199 / 0.35);
+}
+
+#header-group .header__columns {
+  padding-block: 1.375rem;
+}
+
+@media screen and (min-width: 750px) {
+  #header-group .header__column--left {
+    gap: 3rem;
+  }
+}
+
+/* Wordmark */
+.aiira-header-wordmark {
+  display: inline-block;
+  font-family: var(--aiira-font-display, "EB Garamond", Georgia, serif);
+  font-size: clamp(1.25rem, 1.1rem + 0.35vw, 1.75rem);
+  font-weight: 400;
+  letter-spacing: 0.18em;
+  line-height: 1;
+  text-transform: uppercase;
+  color: #0a0a0a;
+  white-space: nowrap;
+}
+
+/* Primary nav */
+@media screen and (min-width: 750px) {
+  #header-group .menu-list__link {
+    font-family: var(--aiira-font-body, "Inter", system-ui, sans-serif);
+    font-size: 13px;
+    font-weight: 500;
+    line-height: 18px;
+    letter-spacing: normal;
+    text-transform: none;
+    color: #444748;
+  }
+
+  #header-group .menu-list__link-title {
+    padding-inline: 0;
+    padding-bottom: 0.25rem;
+    border-bottom: 2px solid transparent;
+    transition:
+      color 0.2s ease,
+      border-color 0.2s ease;
+  }
+
+  #header-group .menu-list__link:hover .menu-list__link-title,
+  #header-group .menu-list__link:focus-visible .menu-list__link-title {
+    color: #0a0a0a;
+  }
+
+  #header-group .menu-list__link--active .menu-list__link-title,
+  #header-group .menu-list__link[aria-current="page"] .menu-list__link-title {
+    color: #0a0a0a;
+    font-weight: 600;
+    border-bottom-color: #0a0a0a;
+  }
+
+  /* Keep active/hover links full contrast (Horizon subdues siblings on hover) */
+  #header-group .menu-list:where(:has(.menu-list__list-item:hover)) .menu-list__link,
+  #header-group
+    .menu-list:where(:has(.menu-list__list-item:not([aria-hidden="true"]) .menu-list__link--active))
+    .menu-list__link {
+    color: #444748;
+  }
+
+  #header-group .menu-list .menu-list__list-item:where(:hover, :focus-within) .menu-list__link,
+  #header-group .menu-list:not(:has(.menu-list__list-item:hover)) .menu-list__link--active,
+  #header-group .menu-list .menu-list__link--active {
+    color: #0a0a0a;
+  }
+
+  #header-group .menu-list__list {
+    gap: 2rem;
+  }
+
+  /* overflow-list shadow DOM — ::part(list) overrides column-gap from outside */
+  .shopify-section-group--header-group overflow-list::part(list) {
+    column-gap: 2rem;
+  }
+
+  .shopify-section-group--header-group .menu-list__list-item:not([slot='overflow']) {
+    padding-inline: 0.75rem;
+  }
+}
+
+/* Hide country / language selectors — design shows bag + account only */
+#header-group .dropdown-localization,
+#header-group localization-form-component,
+#header-group .header-localization {
+  display: none !important;
+}
+
+/* Header actions: minimal outlined icons */
+#header-group .header-actions {
+  gap: 1.5rem;
+}
+
+#header-group .header-actions__action {
+  color: #1b1c1c;
+  opacity: 1;
+  transition: opacity 0.2s ease;
+}
+
+#header-group .header-actions__action:hover {
+  opacity: 0.7;
+}
+
+#header-group .header-actions .svg-wrapper svg {
+  width: 1.375rem;
+  height: 1.375rem;
+}
+
+#header-group .header-actions__cart-icon > span:first-child {
+  display: none;
+}
+
+/* Fixed Home + Atelier AI nav (design/atelier) */
+.aiira-header-nav__list {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 2rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.aiira-header-nav__link {
+  display: inline-block;
+  font-family: var(--aiira-font-body, "Inter", system-ui, sans-serif);
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 18px;
+  color: #444748;
+  text-decoration: none;
+  padding-bottom: 0.25rem;
+  border-bottom: 2px solid transparent;
+  transition:
+    color 0.2s ease,
+    border-color 0.2s ease;
+}
+
+.aiira-header-nav__link:hover,
+.aiira-header-nav__link:focus-visible {
+  color: #0a0a0a;
+}
+
+.aiira-header-nav__link--active {
+  color: #0a0a0a;
+  font-weight: 600;
+  border-bottom-color: #0a0a0a;
+}
+
+@media screen and (min-width: 750px) {
+  .aiira-header-drawer {
+    display: none !important;
+  }
+}
+
+@media screen and (max-width: 749px) {
+  .aiira-header-drawer {
+    padding-block: 0.75rem;
+  }
+
+  .aiira-header-nav__list {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.75rem;
+  }
+}
+
+/* Home block includes Atelier footer — hide Horizon theme footer */
+.shopify-section-group--footer-group {
+  display: none !important;
+}
+
+/* Hide announcement bar — not in design reference */
+#header-group .header-announcements,
+#header-group [class*="header-announcements"] {
+  display: none !important;
+}
