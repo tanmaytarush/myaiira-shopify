@@ -1,6 +1,8 @@
 (function () {
   var GAP = 24;
-  var SPEED_PX_S = 28;
+  var SPEED_PX_S = 44;
+  var INTERACTION_PAUSE_MS = 3500;
+  var SNAP_MS = 650;
 
   function qs(sel, root) {
     return (root || document).querySelector(sel);
@@ -10,14 +12,17 @@
     return Array.from((root || document).querySelectorAll(sel));
   }
 
-  function initTrendsMarquee(viewport) {
-    var marquee = qs("[data-aiira-trends-marquee]", viewport);
-    if (!marquee) return;
+  function initTrendsCarousel(viewport) {
+    if (viewport.hasAttribute("data-aiira-carousel-ready")) return;
+    viewport.setAttribute("data-aiira-carousel-ready", "");
 
-    var section = viewport.closest(".aiira-trends, .aiira-section");
+    var track = qs("[data-aiira-trends-marquee]", viewport);
+    if (!track) return;
+
+    var section = viewport.closest(".aiira-trends");
     var prev = section && qs("[data-aiira-carousel-prev]", section);
     var next = section && qs("[data-aiira-carousel-next]", section);
-    var cards = qsa(".aiira-look-card:not(.aiira-look-card--clone)", marquee);
+    var cards = qsa(".aiira-look-card:not(.aiira-look-card--clone)", track);
 
     if (!cards.length) return;
 
@@ -25,23 +30,36 @@
       var clone = card.cloneNode(true);
       clone.setAttribute("aria-hidden", "true");
       clone.classList.add("aiira-look-card--clone");
-      marquee.appendChild(clone);
+      track.appendChild(clone);
     });
+
+    viewport.scrollLeft = 0;
 
     var offset = 0;
     var paused = false;
+    var hoverPaused = false;
+    var interactionPaused = false;
+    var snapping = false;
     var visible = true;
-    var rafId = null;
+    var resumeTimer = null;
     var lastTs = 0;
     var reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-    function loopWidth() {
-      return marquee.scrollWidth / 2;
+    function syncPaused() {
+      paused = hoverPaused || interactionPaused;
+    }
+
+    function getGap() {
+      var gap = parseFloat(getComputedStyle(track).gap);
+      return isNaN(gap) ? GAP : gap;
     }
 
     function getStep() {
-      var card = marquee.querySelector(".aiira-look-card");
-      return card ? card.offsetWidth + GAP : 0;
+      return cards[0].offsetWidth + getGap();
+    }
+
+    function loopWidth() {
+      return track.scrollWidth / 2;
     }
 
     function wrapOffset() {
@@ -52,7 +70,33 @@
     }
 
     function applyTransform() {
-      marquee.style.transform = "translate3d(" + offset + "px, 0, 0)";
+      track.style.transform = "translate3d(" + offset + "px, 0, 0)";
+    }
+
+    function pauseAuto(ms) {
+      interactionPaused = true;
+      syncPaused();
+      window.clearTimeout(resumeTimer);
+      resumeTimer = window.setTimeout(function () {
+        interactionPaused = false;
+        resumeTimer = null;
+        syncPaused();
+      }, ms || INTERACTION_PAUSE_MS);
+    }
+
+    function nudge(dir) {
+      var step = getStep();
+      if (!step || snapping) return;
+      pauseAuto(INTERACTION_PAUSE_MS);
+      snapping = true;
+      track.classList.add("is-snapping");
+      offset += dir * step;
+      wrapOffset();
+      applyTransform();
+      window.setTimeout(function () {
+        track.classList.remove("is-snapping");
+        snapping = false;
+      }, SNAP_MS);
     }
 
     function tick(ts) {
@@ -60,35 +104,14 @@
       var delta = Math.min(ts - lastTs, 48);
       lastTs = ts;
 
-      if (!paused && visible && !reducedMotion) {
+      if (!paused && visible && !reducedMotion && !snapping) {
         offset -= (SPEED_PX_S * delta) / 1000;
         wrapOffset();
         applyTransform();
       }
 
-      rafId = requestAnimationFrame(tick);
+      requestAnimationFrame(tick);
     }
-
-    function nudge(dir) {
-      var step = getStep();
-      if (!step) return;
-      offset += dir * step;
-      wrapOffset();
-      applyTransform();
-    }
-
-    viewport.addEventListener("mouseenter", function () {
-      paused = true;
-    });
-    viewport.addEventListener("mouseleave", function () {
-      paused = false;
-    });
-    viewport.addEventListener("focusin", function () {
-      paused = true;
-    });
-    viewport.addEventListener("focusout", function (e) {
-      if (!viewport.contains(e.relatedTarget)) paused = false;
-    });
 
     if (prev) {
       prev.addEventListener("click", function () {
@@ -101,11 +124,33 @@
       });
     }
 
+    if (section) {
+      section.addEventListener("mouseenter", function () {
+        hoverPaused = true;
+        syncPaused();
+      });
+      section.addEventListener("mouseleave", function () {
+        hoverPaused = false;
+        syncPaused();
+      });
+      section.addEventListener("focusin", function () {
+        hoverPaused = true;
+        syncPaused();
+      });
+      section.addEventListener("focusout", function (e) {
+        if (!section.contains(e.relatedTarget)) {
+          hoverPaused = false;
+          syncPaused();
+        }
+      });
+    }
+
     viewport.addEventListener(
       "wheel",
       function (e) {
         if (Math.abs(e.deltaY) <= Math.abs(e.deltaX)) return;
         e.preventDefault();
+        pauseAuto(INTERACTION_PAUSE_MS);
         offset -= e.deltaY;
         wrapOffset();
         applyTransform();
@@ -126,11 +171,15 @@
     }
 
     applyTransform();
-    rafId = requestAnimationFrame(tick);
+    requestAnimationFrame(tick);
 
     window.addEventListener("resize", function () {
+      window.clearTimeout(resumeTimer);
+      resumeTimer = null;
+      interactionPaused = false;
       wrapOffset();
       applyTransform();
+      syncPaused();
     });
   }
 
@@ -214,7 +263,7 @@
   }
 
   function boot() {
-    qsa("[data-aiira-trends-viewport]").forEach(initTrendsMarquee);
+    qsa("[data-aiira-trends-viewport]").forEach(initTrendsCarousel);
     initScrollTargets();
     interceptLegacyVtoLinks();
     initNavVtoLinks();

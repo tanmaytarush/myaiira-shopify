@@ -15,6 +15,7 @@
     "setup:vto-flow": "bash scripts/setup-storefront-ui.sh && bash scripts/setup-header-branding.sh",
     "build:n8n-s3-paste": "node scripts/n8n/build-n8n-s3-paste.mjs",
     "push:vto": "bash scripts/setup-header-branding.sh",
+    "push:carousel": "bash scripts/setup-header-branding.sh",
     "config:link": "shopify app config link",
     "generate": "shopify app generate",
     "deploy": "npx shopify app deploy --allow-updates",

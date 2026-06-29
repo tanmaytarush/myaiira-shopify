@@ -246,11 +246,21 @@
   }
 }
 
+@media (prefers-reduced-motion: reduce) {
+  .aiira-trends__marquee.is-snapping {
+    transition: none;
+  }
+}
+
 .aiira-trends__marquee {
   display: flex;
   gap: var(--aiira-gutter);
   width: max-content;
   will-change: transform;
+}
+
+.aiira-trends__marquee.is-snapping {
+  transition: transform 0.65s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .aiira-trends__track {
