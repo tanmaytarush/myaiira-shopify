@@ -26,6 +26,7 @@ echo "→ Copying Atelier branding assets..."
 mkdir -p "$WORK_DIR/assets" "$WORK_DIR/snippets" "$WORK_DIR/blocks" "$WORK_DIR/layout" "$WORK_DIR/sections"
 cp "$BRAND_DIR/assets/aiira-header.css" "$WORK_DIR/assets/"
 cp extensions/vto-widget/assets/vto-widget.js "$WORK_DIR/assets/aiira-vto-widget.js"
+cp extensions/vto-widget/assets/aiira-home.js "$WORK_DIR/assets/aiira-home.js"
 cp extensions/vto-widget/assets/aiira.css "$BRAND_DIR/assets/aiira-vto.css"
 cp "$BRAND_DIR/assets/aiira-vto.css" "$WORK_DIR/assets/"
 cp "$BRAND_DIR/snippets/aiira-header-styles.liquid" "$WORK_DIR/snippets/"
@@ -149,6 +150,7 @@ npx shopify theme push \
   --only sections/header-group.json \
   --only assets/aiira-header.css \
   --only assets/aiira-vto-widget.js \
+  --only assets/aiira-home.js \
   --only assets/aiira-vto.css \
   --only snippets/aiira-header-styles.liquid \
   --only snippets/aiira-header-nav.liquid \
